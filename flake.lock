@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1747215729,
+        "narHash": "sha256-s2A89DvuGBwAGTNM98sRSO11hITOctbjYEY5ia06q4s=",
+        "ref": "refs/heads/desktop",
+        "rev": "220a0bb6a9b7a1a8a4c5a64f38f8ca911c15d81b",
+        "revCount": 25,
+        "type": "git",
+        "url": "ssh://git@github.com/g0r3/dotfiles.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/g0r3/dotfiles.git"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1749285348,
+        "narHash": "sha256-frdhQvPbmDYaScPFiCnfdh3B/Vh81Uuoo0w5TkWmmjU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3e3afe5174c561dee0df6f2c2b2236990146329f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "dotfiles": "dotfiles",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

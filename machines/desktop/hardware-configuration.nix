@@ -12,12 +12,36 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    {
-      device = "/dev/sda1";
-      fsType = "ext4";
+    { device = "/dev/disk/by-uuid/373cd691-d7fe-4e39-bdbd-532fc739ad40";
+      fsType = "btrfs";
+      options = [ "subvol=@" "noatime" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
     };
 
-  swapDevices = [ ];
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/373cd691-d7fe-4e39-bdbd-532fc739ad40";
+      fsType = "btrfs";
+      options = [ "subvol=@home" "noatime" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
+    };
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/373cd691-d7fe-4e39-bdbd-532fc739ad40";
+      fsType = "btrfs";
+      options = [ "subvol=@nix" "noatime" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/A958-FBAD";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/373cd691-d7fe-4e39-bdbd-532fc739ad40";
+      fsType = "btrfs";
+      options = [ "subvol=@log" "noatime" "compress=zstd" "ssd" "discard=async" "space_cache=v2" ];
+    };
+
+  swapDevices = [ "/dev/disk/by-uuid/16f52c93-d662-4079-bd38-d3bf734e0372" ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

@@ -34,8 +34,8 @@ if [ ! -b "$DISK" ]; then
 fi
 
 wipefs -af $DISK
-sgdisk -n 1:2MiB+1024MiB -t 1:ef00 -c 1:EFI $DISK
-sgdisk -n 2:0+65536MiB -t 2:8200 -c 2:SWAP $DISK # 64GiB Swap for Desktop
+sgdisk -n 1:2MiB:+1024MiB -t 1:ef00 -c 1:EFI $DISK
+sgdisk -n 2:0:+65536MiB -t 2:8200 -c 2:SWAP $DISK # 64GiB Swap for Desktop
 sgdisk -n 3:0:0 -t 3:8300 -c 3:NIXOS $DISK
 
 mkfs.btrfs -fL NIXOS $DISK

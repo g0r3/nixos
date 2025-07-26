@@ -45,7 +45,7 @@ btrfs subvolume create @
 btrfs subvolume create @home
 btrfs subvolume create @log
 btrfs subvolume create @nix
-
+umount /mnt
 
 mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt
 mount -o subvol=@home,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/home

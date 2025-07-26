@@ -38,7 +38,7 @@ sgdisk -n 1:2MiB:+1024MiB -t 1:ef00 -c 1:EFI $DISK
 sgdisk -n 2:0:+65536MiB -t 2:8200 -c 2:SWAP $DISK # 64GiB Swap for Desktop
 sgdisk -n 3:0:0 -t 3:8300 -c 3:NIXOS $DISK
 
-mkfs.btrfs -fL NIXOS $DISK
+mkfs.btrfs -fL NIXOS $DISK"3"
 
 mount -o default,noatime,discard,ssd,nodev /mnt
 btrfs subvolume create @
@@ -47,10 +47,10 @@ btrfs subvolume create @log
 btrfs subvolume create @nix
 
 
-mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK /mnt
-mount -o subvol=@home,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK /mnt/home
-mount -o subvol=@log,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK /mnt/var/log
-mount -o subvol=@nix,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK /mnt/nix
+mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt
+mount -o subvol=@home,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/home
+mount -o subvol=@log,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/var/log
+mount -o subvol=@nix,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/nix
 mount -o fmask=0022,dmask=0022 $DISK"1" /mnt/boot
 swapon $DISK"2"
 

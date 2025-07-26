@@ -42,7 +42,7 @@ mkfs.vfat -F32 -n EFI $DISK"1"
 mkswap -L SWAP $DISK"2"
 mkfs.btrfs -fL NIXOS $DISK"3"
 
-mount -o default,noatime,discard,ssd,nodev /mnt
+mount -o default,noatime,discard,ssd,nodev $DISK"3" /mnt
 cd /mnt
 btrfs subvolume create @
 btrfs subvolume create @home

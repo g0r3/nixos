@@ -42,7 +42,7 @@ mkfs.vfat -F32 -n EFI $DISK"1"
 mkswap -L SWAP $DISK"2"
 mkfs.btrfs -fL NIXOS $DISK"3"
 
-mount -o default,noatime,discard,ssd,nodev $DISK"3" /mnt
+mount -o defaults,noatime,discard,ssd,nodev $DISK"3" /mnt
 cd /mnt
 btrfs subvolume create @
 btrfs subvolume create @home
@@ -54,9 +54,9 @@ umount /mnt
 mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt
 
 mkdir -p /mnt/{boot,home,nix,var/log}
-mount -o subvol=@home,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/home
-mount -o subvol=@log,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/var/log
-mount -o subvol=@nix,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/nix
+mount -o subvol=@home,defaults,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/home
+mount -o subvol=@log,defaults,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/var/log
+mount -o subvol=@nix,defaults,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt/nix
 mount -o fmask=0022,dmask=0022 $DISK"1" /mnt/boot
 swapon $DISK"2"
 

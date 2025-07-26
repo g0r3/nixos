@@ -33,6 +33,17 @@ if [ ! -b "$DISK" ]; then
     exit 1
 fi
 
+# Get the device type using lsblk
+# -d: no-dependents, ensures we only get info about the specified device
+# -n: no-headings
+# -o TYPE: output only the TYPE column
+DEVICE_TYPE=$(lsblk -dno TYPE "$DEVICE_PATH")
+
+if [[ ! "$DEVICE_TYPE" == "disk" ]]; then
+  echo "'$DEVICE_PATH' is a partition, not a disk!"
+  exit 1
+fi
+
 wipefs -af $DISK
 sgdisk -n 1:2MiB:+1024MiB -t 1:ef00 -c 1:EFI $DISK
 sgdisk -n 2:0:+65536MiB -t 2:8200 -c 2:SWAP $DISK # 64GiB Swap for Desktop

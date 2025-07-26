@@ -2,12 +2,16 @@
 { config, pkgs, ... }:
 
 {
-  boot.loader.grub = {
-    enable = true;
-    device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0"; # Use stable ID
-    useOSProber = true;
-    timeout = 0;
+  boot.loader = {
+  efi = {
+    canTouchEfiVariables = true;
   };
+  grub = {
+     enable = true;
+     efiSupport = true;
+     device = "nodev";
+  };
+};
 
   # Enable "Silent boot"
   boot.consoleLogLevel = 3;

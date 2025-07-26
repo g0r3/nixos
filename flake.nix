@@ -3,11 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
-    dotfiles = {
-      url = "git+ssh://git@github.com/g0r3/dotfiles.git";
-      flake = false; # This is not a flake itself, just a collection of files.
-    };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {

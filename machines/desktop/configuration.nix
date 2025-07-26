@@ -7,11 +7,12 @@
     ../../modules/boot.nix
     ../../modules/kde.nix
     ../../modules/user.nix
+    ../../dotfiles/zsh/default.nix
   ];
   
   networking.hostName = "desktop";
   system.stateVersion = "25.05";
-
+  nix.settings.trusted-users = [ "root" "@wheel" ];
   time.timeZone = "Europe/Vienna";
 
   i18n.defaultLocale = "en_IE.UTF-8";
@@ -64,4 +65,9 @@
   # SSH server
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false; # Recommended for security
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
 }

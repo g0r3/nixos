@@ -43,12 +43,10 @@ mkswap -L SWAP $DISK"2"
 mkfs.btrfs -fL NIXOS $DISK"3"
 
 mount -o defaults,noatime,discard,ssd,nodev $DISK"3" /mnt
-cd /mnt
-btrfs subvolume create @
-btrfs subvolume create @home
-btrfs subvolume create @log
-btrfs subvolume create @nix
-cd /
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@log
+btrfs subvolume create /mnt/@nix
 umount /mnt
 
 mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt

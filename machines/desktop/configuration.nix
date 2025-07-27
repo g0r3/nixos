@@ -6,6 +6,7 @@
     ./hardware-configuration.nix
     ../../modules/boot.nix
     ../../modules/kde.nix
+    ../../modules/shares.nix
     ../../modules/user.nix
     ../../dotfiles/zsh/default.nix
   ];
@@ -38,11 +39,11 @@
     git
     zsh
     geary
+    pciutils
     brave
     spotify
     sublime3
     obsidian
-    nfs-utils
     libreoffice
     prusa-slicer
     kicad

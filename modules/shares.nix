@@ -4,25 +4,25 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  fileSystems."/mnt/files/" =
+  fileSystems."/mnt/files" =
     { device = "nas.staudacher.dev:/files";
       fsType = "nfs";
       options = [ "x-systemd.automount" "noauto" "x-systemd.mount-timeout=10s" "timeo=15" "soft" ];
     };
 
-  fileSystems."/mnt/media/" =
+  fileSystems."/mnt/media" =
     { device = "nas.staudacher.dev:/media";
       fsType = "nfs";
       options = [ "x-systemd.automount" "noauto" "x-systemd.mount-timeout=10s" "timeo=15" "soft" ];
     };
 
-  fileSystems."/mnt/backup/" =
+  fileSystems."/mnt/backup" =
     { device = "nas.staudacher.dev:/backup";
       fsType = "nfs";
       options = [ "x-systemd.automount" "noauto" "x-systemd.mount-timeout=10s" "timeo=15" "soft" ];
     };
 
-  fileSystems."/mnt/seedbox/" =
+  fileSystems."/mnt/seedbox" =
     { device = "nas.staudacher.dev:/seedbox";
       fsType = "nfs";
       options = [ "x-systemd.automount" "noauto" "x-systemd.mount-timeout=10s" "timeo=15" "soft" ];

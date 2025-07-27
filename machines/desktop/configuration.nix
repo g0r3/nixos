@@ -42,6 +42,7 @@
     spotify
     sublime3
     obsidian
+    nfs-utils
     libreoffice
     prusa-slicer
     kicad

@@ -49,24 +49,24 @@ sgdisk -n 1:2MiB:+1024MiB -t 1:ef00 -c 1:EFI $DISK
 sgdisk -n 2:0:+65536MiB -t 2:8200 -c 2:SWAP $DISK # 64GiB Swap for Desktop
 sgdisk -n 3:0:0 -t 3:8300 -c 3:NIXOS $DISK
 
-mkfs.vfat -F32 -n EFI $DISK"1"
-mkswap -L SWAP $DISK"2"
-mkfs.btrfs -fL NIXOS $DISK"3"
+mkfs.vfat -F32 -n EFI /dev/disk/by-label/EFI
+mkswap -L SWAP /dev/disk/by-label/SWAP
+mkfs.btrfs -fL NIXOS /dev/disk/by-label/NIXOS
 
-mount -o noatime,discard,ssd,nodev $DISK"3" /mnt
+mount -o noatime,discard,ssd,nodev /dev/disk/by-label/NIXOS /mnt
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
 btrfs subvolume create /mnt/@log
 btrfs subvolume create /mnt/@nix
 umount /mnt
 
-swapon $DISK"2"
-mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 $DISK"3" /mnt
+swapon /dev/disk/by-label/SWAP
+mount -o subvol=@,noatime,compress=zstd,ssd,discard=async,space_cache=v2 /dev/disk/by-label/NIXOS /mnt
 mkdir -p /mnt/{boot,home,nix,var/log}
-mount -o fmask=0022,dmask=0022 $DISK"1" /mnt/boot
-mount -o subvol=@home,noatime,compress=zstd,ssd,discard=async $DISK"3" /mnt/home
-mount -o subvol=@log,noatime,compress=zstd,ssd,discard=async $DISK"3" /mnt/var/log
-mount -o subvol=@nix,noatime,compress=zstd,ssd,discard=async $DISK"3" /mnt/nix
+mount -o fmask=0022,dmask=0022 /dev/disk/by-label/EFI /mnt/boot
+mount -o subvol=@home,noatime,compress=zstd,ssd,discard=async /dev/disk/by-label/NIXOS /mnt/home
+mount -o subvol=@log,noatime,compress=zstd,ssd,discard=async /dev/disk/by-label/NIXOS /mnt/var/log
+mount -o subvol=@nix,noatime,compress=zstd,ssd,discard=async /dev/disk/by-label/NIXOS /mnt/nix
 
 nixos-generate-config --root /mnt
 

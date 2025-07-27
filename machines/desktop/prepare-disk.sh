@@ -37,10 +37,10 @@ fi
 # -d: no-dependents, ensures we only get info about the specified device
 # -n: no-headings
 # -o TYPE: output only the TYPE column
-DEVICE_TYPE=$(lsblk -dno TYPE "$DEVICE_PATH")
+DEVICE_TYPE=$(lsblk -dno TYPE "$DISK")
 
 if [[ ! "$DEVICE_TYPE" == "disk" ]]; then
-  echo "'$DEVICE_PATH' is a partition, not a disk!"
+  echo "'$DISK' is not a disk!"
   exit 1
 fi
 

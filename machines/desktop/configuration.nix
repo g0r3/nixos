@@ -10,12 +10,11 @@
     ../../modules/user.nix
     ../../dotfiles/zsh/default.nix
   ];
-  
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];  
   networking.hostName = "desktop";
   system.stateVersion = "25.05";
   nix.settings.trusted-users = [ "root" "@wheel" ];
   time.timeZone = "Europe/Vienna";
-
   i18n.defaultLocale = "en_IE.UTF-8";
   # i18n.extraLocaleSettings = {
   #     LC_ADDRESS = "en_IE.UTF-8";
@@ -33,6 +32,7 @@
   environment.systemPackages = with pkgs; [
     neovim
     wget
+    jq
     mlocate
     hdparm
     dmidecode
@@ -67,7 +67,6 @@
   # SSH server
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = false; # Recommended for security
-
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
   hardware.graphics.enable = true;

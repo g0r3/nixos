@@ -16,8 +16,8 @@
       options = [ "x-systemd.automount" "noauto" "x-systemd.mount-timeout=10s" "timeo=15" "soft" ];
     };
 
-  fileSystems."/mnt/backup" =
-    { device = "nas.staudacher.dev:/backup";
+  fileSystems."/mnt/backups" =
+    { device = "nas.staudacher.dev:/backups";
       fsType = "nfs";
       options = [ "x-systemd.automount" "noauto" "x-systemd.mount-timeout=10s" "timeo=15" "soft" ];
     };

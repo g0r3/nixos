@@ -90,8 +90,9 @@
     [devices]
     "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
   '';
-  hardware.printers.drivers = [ 
-    pkgs.mfcl3750cdw 
+  services.printing.drivers = [ 
+    pkgs.mfcl3750cdw.driver
+    pkgs.mfcl3750cdw.cupswrapper
   ];
 #   hardware.printers = {
 #   ensurePrinters = [

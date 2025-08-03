@@ -13,20 +13,8 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];  
   networking.hostName = "desktop";
   system.stateVersion = "25.05";
-  nix.settings.trusted-users = [ "root" "@wheel" ];
   time.timeZone = "Europe/Vienna";
   i18n.defaultLocale = "en_IE.UTF-8";
-  # i18n.extraLocaleSettings = {
-  #     LC_ADDRESS = "en_IE.UTF-8";
-  #     LC_IDENTIFICATION = "en_IE.UTF-8";
-  #     LC_MEASUREMENT = "en_IE.UTF-8";
-  #     LC_MONETARY = "en_IE.UTF-8";
-  #     LC_NAME = "en_IE.UTF-8";
-  #     LC_NUMERIC = "en_IE.UTF-8";
-  #     LC_PAPER = "en_IE.UTF-8";
-  #     LC_TELEPHONE = "en_IE.UTF-8";
-  #     LC_TIME = "en_IE.UTF-8";
-  # };
 
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
@@ -34,10 +22,18 @@
     wget
     jq
     mlocate
+    ferdium
     hdparm
+    dig
     dmidecode
     git
+    unzip
+    pyright
+    stow
+    stylua
+    clang
     zsh
+    python314
     geary
     pciutils
     brave
@@ -49,8 +45,8 @@
     kicad
     gnome-disk-utility
     bitwarden
+    system-config-printer
     tree
-    sane-airscan
   ];
 
   # Configure keymap in X11
@@ -71,4 +67,34 @@
   hardware.bluetooth.powerOnBoot = true;
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
+
+  services.printing.enable = true;
+  hardware.sane = {
+    enable = true;
+    extraBackends = [ pkgs.sane-airscan ];
+    brscan4 = {
+ 	enable = true;
+	netDevices = {
+	home = { model = "MFC-L3750CDW"; ip = "printer.staudacher.dev"; };
+	};
+    };
+  };
+  environment.etc."sane.d/airscan.conf".text = ''
+    [devices]
+    "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
+  '';
+#   hardware.printers = {
+#   ensurePrinters = [
+#     {
+#       name = "Brother MFC-3750CDW";
+#       location = "Living Room";
+#       deviceUri = "http:///printers/Dell_1250c";
+#       model = "drv:///sample.drv/generic.ppd";
+#       ppdOptions = {
+#         PageSize = "A4";
+#       };
+#     }
+#   ];
+#   ensureDefaultPrinter = "Dell_1250c";
+# };
 }

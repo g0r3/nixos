@@ -20,6 +20,9 @@
   environment.systemPackages = with pkgs; [
     kdePackages.merkuro
     kdePackages.kcalc
+    kdePackages.print-manager
+    simple-scan
+    colloid-gtk-theme
     whitesur-kde
     whitesur-cursors
     whitesur-gtk-theme

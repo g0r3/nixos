@@ -7,7 +7,7 @@
     reinhard = {
       isNormalUser = true;
       description = "Reinhard Staudacher";
-      extraGroups = [ "networkmanager" "wheel" ];
+      extraGroups = [ "networkmanager" "wheel" "scanner" "lp" ];
       shell = pkgs.zsh;
     };
     root = {

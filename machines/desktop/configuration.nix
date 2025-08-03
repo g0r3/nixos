@@ -16,6 +16,12 @@
   time.timeZone = "Europe/Vienna";
   i18n.defaultLocale = "en_IE.UTF-8";
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      mfcl3750cdw = final.callPackage ../../pkgs/mfcl3750cdw/default.nix { };
+    })
+  ];
+
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
     neovim
@@ -34,6 +40,7 @@
     clang
     zsh
     python314
+    mfcl3750cdw
     geary
     pciutils
     brave
@@ -83,6 +90,9 @@
     [devices]
     "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
   '';
+  hardware.printers.drivers = [ 
+    pkgs.mfcl3750cdw 
+  ];
 #   hardware.printers = {
 #   ensurePrinters = [
 #     {

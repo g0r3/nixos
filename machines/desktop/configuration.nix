@@ -1,5 +1,5 @@
 # nixos/machines/desktop/configuration.nix
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, lib, self', inputs, ... }:
 
 {
   imports = [
@@ -16,11 +16,28 @@
   time.timeZone = "Europe/Vienna";
   i18n.defaultLocale = "en_IE.UTF-8";
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      mfcl3750cdw = final.callPackage ../../pkgs/mfcl3750cdw/default.nix { };
-    })
-  ];
+  # nixpkgs.overlays = [
+  #   (final: prev: {
+  #     mfcl3750cdw = final.callPackage ../../pkgs/mfcl3750cdw/default.nix { };
+  #   })
+  # ];
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    steam = pkgs.steam.override {
+      extraPkgs = pkgs: with pkgs; [
+        xorg.libXcursor
+        xorg.libXi
+        xorg.libXinerama
+        xorg.libXScrnSaver
+        libpng
+        libpulseaudio
+        libvorbis
+        stdenv.cc.cc.lib
+        libkrb5
+        keyutils
+      ];
+    };
+  };
 
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
@@ -28,26 +45,34 @@
     wget
     jq
     mlocate
+    pavucontrol # PulseAudio Volume Control
+    pamixer
+    alsa-utils
     ferdium
+    ethtool
     hdparm
     dig
     dmidecode
     git
     unzip
+    gamescope
     pyright
     stow
     stylua
     clang
     zsh
     python314
-    mfcl3750cdw
+    # mfcl3750cdw
+    ripgrep-all
     geary
     pciutils
+    nmap
     brave
     spotify
     sublime3
     obsidian
     libreoffice
+    usbutils
     prusa-slicer
     kicad
     gnome-disk-utility
@@ -55,6 +80,7 @@
     system-config-printer
     tree
   ];
+  
 
   # Configure keymap in X11
   services.xserver.enable = true;
@@ -75,7 +101,7 @@
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
 
-  services.printing.enable = true;
+  # services.printing.enable = true;
   hardware.sane = {
     enable = true;
     extraBackends = [ pkgs.sane-airscan ];
@@ -86,14 +112,27 @@
 	};
     };
   };
-  environment.etc."sane.d/airscan.conf".text = ''
-    [devices]
-    "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
-  '';
-  services.printing.drivers = [ 
-    pkgs.mfcl3750cdw.driver
-    pkgs.mfcl3750cdw.cupswrapper
-  ];
+
+  # environment.etc."sane.d/airscan.conf".text = ''
+  #   [devices]
+  #   "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
+  # '';
+  #   services.printing = {
+  #   enable = true;
+  #   drivers = [ pkgs.gutenprint ] ++ lib.lists.optional (pkgs.hostPlatform.system == "x86_64-linux")
+  #     .packages.printer-driver-mfcl3750cdw;
+  # };
+
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true; # if not already enabled
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment the following
+    #jack.enable = true;
+  };
+
 #   hardware.printers = {
 #   ensurePrinters = [
 #     {

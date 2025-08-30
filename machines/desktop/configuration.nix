@@ -1,6 +1,8 @@
 # nixos/machines/desktop/configuration.nix
 { config, pkgs, lib, self', inputs, ... }:
 
+let brotherpkg = pkgs.callPackage ../../packages/mfcl3750cdw/default.nix {};
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -22,22 +24,22 @@
   #   })
   # ];
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      extraPkgs = pkgs: with pkgs; [
-        xorg.libXcursor
-        xorg.libXi
-        xorg.libXinerama
-        xorg.libXScrnSaver
-        libpng
-        libpulseaudio
-        libvorbis
-        stdenv.cc.cc.lib
-        libkrb5
-        keyutils
-      ];
-    };
-  };
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   steam = pkgs.steam.override {
+  #     extraPkgs = pkgs: with pkgs; [
+  #       xorg.libXcursor
+  #       xorg.libXi
+  #       xorg.libXinerama
+  #       xorg.libXScrnSaver
+  #       libpng
+  #       libpulseaudio
+  #       libvorbis
+  #       stdenv.cc.cc.lib
+  #       libkrb5
+  #       keyutils
+  #     ];
+  #   };
+  # };
 
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
@@ -113,15 +115,9 @@
     };
   };
 
-  # environment.etc."sane.d/airscan.conf".text = ''
-  #   [devices]
-  #   "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
-  # '';
-  #   services.printing = {
-  #   enable = true;
-  #   drivers = [ pkgs.gutenprint ] ++ lib.lists.optional (pkgs.hostPlatform.system == "x86_64-linux")
-  #     .packages.printer-driver-mfcl3750cdw;
-  # };
+
+
+
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -133,18 +129,29 @@
     #jack.enable = true;
   };
 
-#   hardware.printers = {
-#   ensurePrinters = [
-#     {
-#       name = "Brother MFC-3750CDW";
-#       location = "Living Room";
-#       deviceUri = "http:///printers/Dell_1250c";
-#       model = "drv:///sample.drv/generic.ppd";
-#       ppdOptions = {
-#         PageSize = "A4";
-#       };
-#     }
-#   ];
-#   ensureDefaultPrinter = "Dell_1250c";
-# };
+  environment.etc."sane.d/airscan.conf".text = ''
+    [devices]
+    "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
+  '';
+
+    services.printing = {
+    enable = true;
+    drivers = [ brotherpkg.cupswrapper ];
+  };
+  hardware.printers = {
+    ensureDefaultPrinter = "Brother_MFC_L3750CDW";
+    ensurePrinters = [
+      {
+        name = "Brother_MFC_L3750CDW";
+        model = "brother_mfcl3750cdw_printer_en.ppd";
+        location = "Living Room";
+        description = "Brother MFC-L3750CDW";
+        deviceUri = "ipp://printer.staudacher.dev/ipp/print";
+        ppdOptions.PageSize = "A4";
+      }
+    ];
+  };
+
+
 }
+

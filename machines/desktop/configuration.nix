@@ -1,10 +1,15 @@
 # nixos/machines/desktop/configuration.nix
 { config, pkgs, lib, self', inputs, ... }:
 
-let brotherpkg = pkgs.callPackage ../../packages/mfcl3750cdw/default.nix {};
-in
 {
+  nixpkgs.overlays = [
+    (final: prev: {
+      mfcl3750cdw = final.callPackage ../../packages/mfcl3750cdw/default.nix { };
+    })
+  ];
+
   imports = [
+    # <nixpkgs/nixos/modules/services/hardware/sane_extra_backends/brscan4.nix>
     ./hardware-configuration.nix
     ../../modules/boot.nix
     ../../modules/kde.nix
@@ -17,12 +22,6 @@ in
   system.stateVersion = "25.05";
   time.timeZone = "Europe/Vienna";
   i18n.defaultLocale = "en_IE.UTF-8";
-
-  # nixpkgs.overlays = [
-  #   (final: prev: {
-  #     mfcl3750cdw = final.callPackage ../../pkgs/mfcl3750cdw/default.nix { };
-  #   })
-  # ];
 
   # nixpkgs.config.packageOverrides = pkgs: {
   #   steam = pkgs.steam.override {
@@ -37,8 +36,7 @@ in
   #       stdenv.cc.cc.lib
   #       libkrb5
   #       keyutils
-  #     ];
-  #   };
+  #     ]   };
   # };
 
   nixpkgs.config.allowUnfree = true;
@@ -61,11 +59,11 @@ in
     pyright
     stow
     stylua
+    wl-clipboard
     clang
     zsh
     python314
-    # mfcl3750cdw
-    ripgrep-all
+    ripgrep
     geary
     pciutils
     nmap
@@ -103,21 +101,6 @@ in
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
 
-  # services.printing.enable = true;
-  hardware.sane = {
-    enable = true;
-    extraBackends = [ pkgs.sane-airscan ];
-    brscan4 = {
- 	enable = true;
-	netDevices = {
-	home = { model = "MFC-L3750CDW"; ip = "printer.staudacher.dev"; };
-	};
-    };
-  };
-
-
-
-
 
   security.rtkit.enable = true;
   services.pipewire = {
@@ -129,14 +112,11 @@ in
     #jack.enable = true;
   };
 
-  environment.etc."sane.d/airscan.conf".text = ''
-    [devices]
-    "Brother MFC-L3750CDW" = http://printer.staudacher.dev:80/WebServices/ScannerService, WSD
-  '';
 
-    services.printing = {
+
+  services.printing = {
     enable = true;
-    drivers = [ brotherpkg.cupswrapper ];
+    drivers = [ pkgs.mfcl3750cdw.cupswrapper ];
   };
   hardware.printers = {
     ensureDefaultPrinter = "Brother_MFC_L3750CDW";
@@ -151,7 +131,18 @@ in
       }
     ];
   };
+  hardware.sane = {
+    enable = true;
+    extraBackends = [ pkgs.sane-airscan ];
+  };
 
+  environment.etc."sane.d/airscan.conf".text = ''
+    [devices]
+    "Brother MFC-L3750CDW" = https://printer.staudacher.dev/eSCL
+
+    [options]
+    discovery = disable
+  '';
 
 }
 

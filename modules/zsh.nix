@@ -34,11 +34,14 @@
         ipp = "curl ipinfo.io/ip";
         aspm = "sudo lspci -vv | awk '/ASPM/{print $0}' RS= | grep --color -P '(^[a-z0-9:.]+|ASPM )'";
         mkdir = "mkdir -p";
+        grep = "grep --color=auto";
+        egrep = "fgrep --color=auto";
+        fgrep = "fgrep --color=auto";
         # Only do `nix flake update` if flake.lock hasn't been updated within an hour
         # deploy-nix = "f() { if [[ $(find . -mmin -60 -type f -name flake.lock | wc -c) -eq 0 ]]; then nix flake update; fi && deploy .#$1 --remote-build -s --auto-rollback false && rsync -ax --delete ./ $1:/etc/nixos/ };f";
         # git
         gs = "git status";
-        gc = "git commit";
+        # gc = "f() { git commit -m \"$1\"}";
         gp = "git push origin HEAD";
         gd = "git diff";
         ga = "git add";
@@ -46,8 +49,13 @@
         # nvim
         vim = "nvim";
         # nixos
-        nxc = "pushd > /dev/null; cd $HOME/git/nixos; vim; popd > /dev/null";
-        nxr = "sudo nixos-rebuild switch --flake $HOME/git/nixos/#desktop";
+        ne = "pushd > /dev/null; cd $HOME/git/nixos; vim; popd > /dev/null";
+        nr = "sudo nixos-rebuild switch --flake $HOME/git/nixos/#desktop";
+        ns = "nix-shell";
+        # gemini
+        g = "gemini";
+        # convenience
+        mip = "curl ip.me";
       };
 
       # Lets keep this for later. Needs Home Manager

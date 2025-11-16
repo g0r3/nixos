@@ -22,8 +22,6 @@
     ../../modules/neovim.nix
   ];
 
-  custom.kicad.enable = true;
-
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"

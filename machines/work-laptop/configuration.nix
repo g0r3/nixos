@@ -53,6 +53,7 @@
   environment.systemPackages = with pkgs; [
     pavucontrol
     zoom
+    displaylink
     #barracuda-vpn-client
     pamixer
     alsa-utils

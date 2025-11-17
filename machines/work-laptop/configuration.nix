@@ -26,6 +26,7 @@
     "nix-command"
     "flakes"
   ];
+  nixpkgs.config.allowUnfree = true;
   networking.hostName = "ENG-rstaudacher";
   system.stateVersion = "25.05";
   time.timeZone = "Europe/Vienna";
@@ -54,6 +55,7 @@
     pavucontrol
     zoom
     displaylink
+    slack
     #barracuda-vpn-client
     pamixer
     alsa-utils
@@ -77,6 +79,7 @@
     layout = "us";
     variant = "de_se_fi";
   };
+  services.xserver.videoDrivers = [ "displaylink" "modesetting" ];
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;
 

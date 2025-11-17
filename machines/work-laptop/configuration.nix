@@ -53,10 +53,12 @@
 
   environment.systemPackages = with pkgs; [
     pavucontrol
-    zoom
+    zoom-us
     displaylink
     slack
+    freerdp
     #barracuda-vpn-client
+    realvnc-vnc-viewer
     pamixer
     alsa-utils
     stow

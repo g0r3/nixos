@@ -23,6 +23,7 @@ in
     # ../../modules/printer.nix
     ../../modules/maintenance.nix
     ../../modules/neovim.nix
+    ../../modules/vscode.nix
     ../../modules/nixbuilder.nix
   ];
 

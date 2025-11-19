@@ -48,8 +48,8 @@ wipefs -af $DISK
 sgdisk -n 1:2MiB:+1024MiB -t 1:ef00 -c 1:EFI $DISK
 sgdisk -n 2:0:0 -t 2:8309 -c 2:"luks" $DISK
 
-cryptsetup luksFormat -q /dev/sda2 --key-file ./password.txt
-cryptsetup open /dev/sda2 luksfs --key-file ./password.txt
+cryptsetup luksFormat -q /dev/nvme0n1 --key-file ./password.txt
+cryptsetup open /dev/nvme0n1 luksfs --key-file ./password.txt
 
 mkfs.vfat -F32 -n EFI /dev/disk/by-partlabel/EFI
 mkfs.btrfs -fL NIXOS /dev/mapper/luksfs

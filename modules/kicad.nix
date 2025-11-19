@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -6,14 +11,14 @@ let
   cfg = config.custom.kicad;
 
   KicadModTree = pkgs.python312Packages.buildPythonPackage rec {
-            pname = "KicadModTree";
-            version = "1.1.2";
-            format = "setuptools";
-            src = pkgs.fetchPypi {
-              inherit pname version;
-              sha256 = "sha256-XdnY9FteJkaw1UEhEbXtEjCPubitSzJkCjq2VF+w7KI=";
-            };
-            doCheck = false;
+    pname = "KicadModTree";
+    version = "1.1.2";
+    format = "setuptools";
+    src = pkgs.fetchPypi {
+      inherit pname version;
+      sha256 = "sha256-XdnY9FteJkaw1UEhEbXtEjCPubitSzJkCjq2VF+w7KI=";
+    };
+    doCheck = false;
   };
 
   jlc2kicadlib = pkgs.python312Packages.buildPythonApplication rec {
@@ -42,7 +47,7 @@ let
       description = "JLC2KiCad_lib is a python script that generate a KiCad library footprint and symbol from JLCPCB/LCSC components library";
       homepage = "https://github.com/TousstNicolas/JLC2KiCad_lib";
       license = licenses.mit;
-      maintainers = [ ]; 
+      maintainers = [ ];
     };
   };
 

@@ -1,8 +1,9 @@
 { pkgs, ... }:
 
 {
-nixpkgs.overlays = [
-    (final: prev:
+  nixpkgs.overlays = [
+    (
+      final: prev:
       let
         mfcl3750cdw_org = final.callPackage ../packages/mfcl3750cdw/package.nix { };
       in
@@ -17,7 +18,8 @@ nixpkgs.overlays = [
             '';
           });
         };
-      })
+      }
+    )
   ];
 
   services.printing = {

@@ -1,4 +1,12 @@
-{ config, pkgs, lib, self', inputs, ... }:{
+{
+  config,
+  pkgs,
+  lib,
+  self',
+  inputs,
+  ...
+}:
+{
   imports = [
     ../base/base.nix
   ];
@@ -9,4 +17,3 @@
     openFirewall = true;
   };
 }
-

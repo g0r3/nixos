@@ -1,4 +1,11 @@
-{ config, pkgs, lib, self', inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  self',
+  inputs,
+  ...
+}:
 {
 
   imports = [
@@ -6,8 +13,14 @@
     ../../../modules/maintenance.nix
   ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.trusted-users = [ "root" "admin" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  nix.settings.trusted-users = [
+    "root"
+    "admin"
+  ];
   networking.hostName = "arr";
   system.stateVersion = "25.05";
   time.timeZone = "Europe/Vienna";

@@ -88,7 +88,10 @@ in
     layout = "us";
     variant = "de_se_fi";
   };
-  services.xserver.videoDrivers = [ "displaylink" "modesetting" ];
+  services.xserver.videoDrivers = [
+    "displaylink"
+    "modesetting"
+  ];
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;
 

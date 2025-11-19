@@ -2,6 +2,10 @@
 {
   environment.systemPackages = with pkgs; [
     nodejs
+    (python3.withPackages (python-pkgs: with python-pkgs; [
+        debugpy
+    ]))
+    ruff
     stylua
     wl-clipboard
     ripgrep

@@ -20,6 +20,7 @@
     plasma-browser-integration
     konsole
     elisa
+    kate
   ];
 
   # KDE-related packages and themes

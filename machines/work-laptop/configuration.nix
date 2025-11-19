@@ -6,6 +6,9 @@
   inputs,
   ...
 }:
+let
+  barracudavpn = pkgs.callPackage ../../packages/barracudavpn/default.nix { };
+in
 {
 
   imports = [
@@ -20,8 +23,10 @@
     # ../../modules/printer.nix
     ../../modules/maintenance.nix
     ../../modules/neovim.nix
+    ../../modules/nixbuilder.nix
   ];
 
+  rstaudacher.nixbuilder.enable = true;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -41,6 +46,7 @@
         "networkmanager"
         "wheel"
         "scanner"
+        "rstaudacher"
         "lp"
         "mlocate"
       ];
@@ -57,13 +63,13 @@
     displaylink
     slack
     freerdp
-    #barracuda-vpn-client
     realvnc-vnc-viewer
     pamixer
     alsa-utils
     stow
     clang
     gemini-cli
+    barracudavpn
     nurl # generates Nix fetcher calls
     python314
     ipcalc
@@ -86,6 +92,14 @@
   networking.firewall.enable = false;
 
   security.polkit.enable = true;
+  security.pki.certificateFiles = [
+    ./folsom.crt
+    ./idefix.crt
+    ./INN-DEV.crt
+    ./ip-vix.crt
+    ./qdaca.crt
+    ./ssl_inspection.pem
+  ];
 
   # SSH server
   services.openssh.enable = true;

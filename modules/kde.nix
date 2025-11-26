@@ -29,6 +29,7 @@
     window-title-applet
     kdePackages.merkuro
     kdePackages.sddm-kcm
+    kdePackages.kcolorchooser
     kdePackages.kscreenlocker
     kdePackages.kcalc
     kdePackages.kdeconnect-kde

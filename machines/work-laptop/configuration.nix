@@ -66,6 +66,11 @@ in
     freerdp
     realvnc-vnc-viewer
     pamixer
+    (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf" ''
+      [General]
+      type=color
+      color=#505050
+    '')
     alsa-utils
     stow
     clang
@@ -104,6 +109,18 @@ in
     ./qdaca.crt
     ./ssl_inspection.pem
   ];
+
+  fileSystems."/mnt/qarepo" = {
+    device = "10.17.6.4:/qarepo";
+    fsType = "nfs";
+    options = [
+      "x-systemd.automount"
+      "noauto"
+      "x-systemd.mount-timeout=10s"
+      "timeo=15"
+      "soft"
+    ];
+  };
 
   # SSH server
   services.openssh.enable = true;

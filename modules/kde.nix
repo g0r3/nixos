@@ -28,7 +28,7 @@
     shutdown-or-switch
     window-title-applet
     kdePackages.merkuro
-    kdePackages.sddm-kcm
+    kdePackages.kscreenlocker
     kdePackages.kcalc
     kdePackages.kdeconnect-kde
     kdePackages.print-manager

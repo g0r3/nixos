@@ -10,7 +10,7 @@
         debugpy
       ]
     ))
-    # ruff
+    ruff # also needed for git precommit
     # stylua
     # lua-language-server
     wl-clipboard

@@ -27,11 +27,12 @@ in
     ../../modules/nixbuilder.nix
   ];
 
-  rstaudacher.nixbuilder.enable = true;
+  # rstaudacher.nixbuilder.enable = true;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
+  nix.settings.trusted-users = [ "rstaudacher" "root" ];
   nixpkgs.config.allowUnfree = true;
   networking.hostName = "ENG-rstaudacher";
   system.stateVersion = "25.05";
@@ -111,7 +112,7 @@ in
   ];
 
   fileSystems."/mnt/qarepo" = {
-    device = "10.17.6.4:/qarepo";
+    device = "10.17.6.4:/home/qa";
     fsType = "nfs";
     options = [
       "x-systemd.automount"

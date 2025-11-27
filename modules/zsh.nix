@@ -37,7 +37,7 @@
         grep = "grep --color=auto";
         egrep = "fgrep --color=auto";
         fgrep = "fgrep --color=auto";
-        e = "exit"
+        e = "exit";
         # Only do `nix flake update` if flake.lock hasn't been updated within an hour
         # deploy-nix = "f() { if [[ $(find . -mmin -60 -type f -name flake.lock | wc -c) -eq 0 ]]; then nix flake update; fi && deploy .#$1 --remote-build -s --auto-rollback false && rsync -ax --delete ./ $1:/etc/nixos/ };f";
         # git

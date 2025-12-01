@@ -65,6 +65,7 @@
     clang
     gemini-cli
     nurl # generates Nix fetcher calls
+    prusa-slicer
     python314
     ipcalc
   ];

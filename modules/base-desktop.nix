@@ -12,6 +12,5 @@
     libreoffice
     gnome-disk-utility
     system-config-printer
-    prusa-slicer
   ];
 }

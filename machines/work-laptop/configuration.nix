@@ -8,6 +8,9 @@
 }:
 let
   barracudavpn = pkgs.callPackage ../../packages/barracudavpn/default.nix { };
+  libfprint-2-tod1-broadcom-cv3plus =
+    pkgs.callPackage ../../packages/libfprint-2-tod1-broadcom-cv3plus/package.nix
+      { };
 in
 {
 
@@ -32,7 +35,10 @@ in
     "nix-command"
     "flakes"
   ];
-  nix.settings.trusted-users = [ "rstaudacher" "root" ];
+  nix.settings.trusted-users = [
+    "rstaudacher"
+    "root"
+  ];
   nixpkgs.config.allowUnfree = true;
   networking.hostName = "ENG-rstaudacher";
   system.stateVersion = "25.05";
@@ -58,7 +64,21 @@ in
       shell = pkgs.zsh;
     };
   };
+  services.fprintd = {
+    enable = true;
+    package = pkgs.fprintd-tod;
+    tod.enable = true;
+    # Search for "libfprint" in packages to find other drivers
+    tod.driver = libfprint-2-tod1-broadcom-cv3plus;
+  };
 
+  systemd.services.fprintd.serviceConfig = {
+    BindReadOnlyPaths = [
+      "${libfprint-2-tod1-broadcom-cv3plus}${libfprint-2-tod1-broadcom-cv3plus.passthru.firmwarePath}:/var/lib/fprint/.broadcomCv3plusFW"
+    ];
+  };
+
+  services.fwupd.enable = true;
   environment.systemPackages = with pkgs; [
     pavucontrol
     zoom-us

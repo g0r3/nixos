@@ -45,6 +45,7 @@
         "audio"
         "networkmanager"
         "wheel"
+        "dialout" # platformio development
         "scanner"
         "lp"
         "mlocate"

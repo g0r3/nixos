@@ -24,6 +24,7 @@
     ../../modules/kicad.nix
     ../../modules/neovim.nix
     ../../modules/base.nix
+    ../../modules/3dprinting.nix
   ];
 
   custom.kicad.enable = true;
@@ -66,7 +67,6 @@
     clang
     gemini-cli
     nurl # generates Nix fetcher calls
-    prusa-slicer
     python314
     ipcalc
   ];

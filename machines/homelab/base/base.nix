@@ -9,7 +9,7 @@
 {
 
   imports = [
-    ../../../dotfiles/zsh/default.nix
+    ../../../modules/zsh.nix
     ../../../modules/maintenance.nix
   ];
 

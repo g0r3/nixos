@@ -6,6 +6,7 @@
     jq
     mlocate
     ethtool
+    screen
     hdparm
     dig
     dmidecode

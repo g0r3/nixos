@@ -1,6 +1,8 @@
 # base shell programs packages every system should have
 { pkgs, ... }:
 {
+  services.fwupd.enable = true;
+
   environment.systemPackages = with pkgs; [
     wget
     jq

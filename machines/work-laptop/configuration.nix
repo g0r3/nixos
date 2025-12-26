@@ -21,9 +21,7 @@ in
     ../../modules/base-desktop.nix
     ../../modules/kde.nix
     ../../modules/bitwarden.nix
-    # ../../modules/shares.nix  #need to be adjusted
     ../../modules/zsh.nix
-    # ../../modules/printer.nix
     ../../modules/maintenance.nix
     ../../modules/neovim.nix
     ../../modules/vscode.nix
@@ -64,6 +62,8 @@ in
       shell = pkgs.zsh;
     };
   };
+
+  # fingerprint reader
   services.fprintd = {
     enable = true;
     package = pkgs.fprintd-tod;
@@ -78,7 +78,6 @@ in
     ];
   };
 
-  services.fwupd.enable = true;
   environment.systemPackages = with pkgs; [
     pavucontrol
     zoom-us

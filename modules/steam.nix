@@ -62,6 +62,9 @@ in
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
     serviceConfig = {
+      Environment = [
+        "PATH=/run/current-system/sw/bin"
+      ];
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
       # FIX 2: Make the systemd service launch your custom package.
       ExecStart = "${steam-with-fixed-drivers}/bin/steam -nochatui -nofriendsui -silent %U";

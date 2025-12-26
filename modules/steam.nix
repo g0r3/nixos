@@ -12,7 +12,7 @@ let
       })
       {
         config.allowUnfree = true;
-        system = pkgs.system;
+        system = pkgs.stdenv.hostPlatform.system;
       };
 
   steam-with-fixed-drivers = pkgs.steam.override {

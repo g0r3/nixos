@@ -27,7 +27,7 @@ let
     vim = "nvim";
     # nixos
     ne = "pushd > /dev/null; cd $HOME/git/nixos; vim; popd > /dev/null";
-    nr = "sudo nixos-rebuild switch --flake";
+    nr = "sudo nixos-rebuild switch --flake $HOME/git/nixos/#$(hostname)";
     ns = "nix-shell";
     # gemini
     g = "gemini";
@@ -63,3 +63,4 @@ in
     oh-my-posh
   ];
 }
+

@@ -1,4 +1,10 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  isNixos,
+  isDarwin,
+  ...
+}:
 let
   myAliases = {
     l = "ls -lh --color=auto";
@@ -14,11 +20,8 @@ let
     egrep = "fgrep --color=auto";
     fgrep = "fgrep --color=auto";
     e = "exit";
-    # Only do `nix flake update` if flake.lock hasn't been updated within an hour
-    # deploy-nix = "f() { if [[ $(find . -mmin -60 -type f -name flake.lock | wc -c) -eq 0 ]]; then nix flake update; fi && deploy .#$1 --remote-build -s --auto-rollback false && rsync -ax --delete ./ $1:/etc/nixos/ };f";
     # git
     gs = "git status";
-    # gc = "f() { git commit -m \"$1\"}";
     gp = "git push origin HEAD";
     gd = "git diff";
     ga = "git add";
@@ -29,6 +32,7 @@ let
     ne = "pushd > /dev/null; cd $HOME/git/nixos; vim; popd > /dev/null";
     nr = "sudo nixos-rebuild switch --flake $HOME/git/nixos/#$(hostname)";
     ns = "nix-shell";
+    nsp = "nix search package";
     # gemini
     g = "gemini";
     # convenience
@@ -36,31 +40,43 @@ let
   };
 in
 {
-  system.userActivationScripts.zshrc = "touch .zshrc";
+  config = lib.mkMerge [
+    (lib.optionalAttrs isDarwin {
+      programs.zsh = {
+        enableSyntaxHighlighting = true;
+        enableAutosuggestions = true;
+        interactiveShellInit = ''
+          setopt HIST_IGNORE_ALL_DUPS
+          # Manually enable autosuggestions if the option doesn't exist
+          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+        '';
+      };
+    })
+    (lib.optionalAttrs isNixos {
+      system.userActivationScripts.zshrc = "touch .zshrc";
 
-  programs = {
-    zsh = {
-      enable = true;
-      enableCompletion = false;
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
-      histSize = 10000;
-      histFile = "$HOME/.zsh_history";
-      setOptions = [
-        "HIST_IGNORE_ALL_DUPS"
+      programs.zsh = {
+        autosuggestions.enable = true;
+        syntaxHighlighting.enable = true;
+        setOptions = [ "HIST_IGNORE_ALL_DUPS" ];
+        zsh-autoenv.enable = true;
+      };
+    })
+    {
+      environment.shellAliases = myAliases;
+
+      programs.zsh = {
+        enable = true;
+        enableCompletion = false;
+        histSize = 10000;
+        histFile = "$HOME/.zsh_history";
+      };
+
+      environment.systemPackages = with pkgs; [
+        zsh
+        wezterm
+        oh-my-posh
       ];
-      zsh-autoenv.enable = true;
-      shellAliases = myAliases;
-    };
-
-    bash = {
-      shellAliases = myAliases;
-    };
-  };
-  environment.systemPackages = with pkgs; [
-    zsh
-    wezterm
-    oh-my-posh
+    }
   ];
 }
-

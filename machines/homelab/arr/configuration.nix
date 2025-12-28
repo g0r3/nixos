@@ -16,14 +16,9 @@ in
 {
 
   imports = [
-    ../../../modules/zsh.nix
+    ../../../modules/zsh-nixos.nix
     # ../../../modules/maintenance.nix
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
-  ];
-
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
   ];
 
   nix.settings.trusted-users = [

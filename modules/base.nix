@@ -1,25 +1,37 @@
-# base shell programs packages every system should have
-{ pkgs, ... }:
+# base shell programs packages every NixOS system should have
 {
-  services.fwupd.enable = true;
+  pkgs,
+  lib,
+  isNixos,
+  ...
+}:
+{
+  services.fwupd.enable = lib.mkIf isNixos true;
 
-  environment.systemPackages = with pkgs; [
-    wget
-    jq
-    mlocate
-    ethtool
-    gnumake
-    screen
-    hdparm
-    dig
-    dmidecode
-    git
-    unzip
-    zsh
-    nurl # generates Nix fetcher calls
-    pciutils
-    nmap
-    usbutils
-    tree
-  ];
+  environment.systemPackages =
+    with pkgs;
+    [
+      # Cross-platform packages
+      wget
+      jq
+      gnumake
+      screen
+      dig
+      git
+      unzip
+      zsh
+      nurl
+      nmap
+      tree
+      python314
+    ]
+    ++ lib.optionals isNixos [
+      # Linux-only tools
+      mlocate
+      ethtool
+      hdparm
+      dmidecode
+      pciutils
+      usbutils
+    ];
 }

@@ -3,42 +3,66 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
   outputs =
-    { self, nixpkgs, ... }@inputs:
+    {
+      self,
+      nixpkgs,
+      nix-darwin,
+      nix-homebrew,
+      ...
+    }@inputs:
     let
-      system = "x86_64-linux";
-
-      # 👇 Define pkgs with allowUnfree = true here
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
+      sharedConfig = {
+        nixpkgs.config.allowUnfree = true;
+        # nixpkgs.config.allowUnsupportedSystem = true;
+        # nixpkgs.config.allowBroken = true;
+        nix.settings.experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
       };
 
+      mkNixSystem =
+        machine:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs;
+            isNixos = true;
+            isDarwin = false;
+          };
+          modules = [
+            machine
+            sharedConfig
+          ];
+        };
+
+      mkDarwinSystem =
+        machine:
+        nix-darwin.lib.darwinSystem {
+          specialArgs = {
+            inherit inputs;
+            isNixos = false;
+            isDarwin = true;
+          };
+          modules = [
+            machine
+            sharedConfig
+          ];
+        };
     in
     {
-
       nixosConfigurations = {
-        desktop = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; }; # Pass inputs to modules
-          modules = [
-            # This is the main entry point for the desktop configuration
-            ./machines/desktop/configuration.nix
-          ];
-        };
-        work-laptop = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./machines/work-laptop/configuration.nix
-          ];
-        };
-        arr = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./machines/homelab/arr/configuration.nix
-          ];
-        };
+        desktop = mkNixSystem ./machines/desktop/configuration.nix;
+        work-laptop = mkNixSystem ./machines/work-laptop/configuration.nix;
+        # arr = mkNixSystem ./machines/homelab/arr/configuration.nix;
+      };
+      darwinConfigurations = {
+        macbook-pro = mkDarwinSystem ./machines/macbook/configuration.nix;
       };
     };
 }

@@ -3,7 +3,6 @@
   pkgs,
   lib,
   self',
-  inputs,
   ...
 }:
 {
@@ -24,15 +23,9 @@
     ../../modules/kicad.nix
     ../../modules/neovim.nix
     ../../modules/base.nix
-    ../../modules/3dprinting.nix
+    ../../modules/prusa.nix
   ];
 
-  custom.kicad.enable = true;
-
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
   networking.hostName = "desktop";
   system.stateVersion = "25.05";
   time.timeZone = "Europe/Vienna";
@@ -67,9 +60,16 @@
     clang
     gemini-cli
     nurl # generates Nix fetcher calls
-    python314
     ipcalc
   ];
+
+  modules = {
+    bitwarden.enable = true;
+    ferdium.enable = true;
+    prusa.enable = true;
+    neovim.enable = true;
+    kicad.enable = true;
+  };
 
   services.locate = {
     enable = true;

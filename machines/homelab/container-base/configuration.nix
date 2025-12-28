@@ -3,68 +3,84 @@
   pkgs,
   modulesPath,
   lib,
+  system,
   ...
 }:
 
 {
   imports = [
-    # This module contains the logic to use the IP address set in Proxmox UI
-    (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    (modulesPath + "/profiles/qemu-guest.nix")
   ];
 
-  # Enable the Proxmox-specific network management
-  proxmoxLXC.manageNetwork = true;
+  config = {
+    #Provide a default hostname
+    networking.hostName = lib.mkDefault "base";
+    networking.useDHCP = lib.mkDefault true;
 
-  # Explicitly enable DHCP on eth0
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
+    # Enable QEMU Guest for Proxmox
+    services.qemuGuest.enable = lib.mkDefault true;
 
-  # Optimize for container usage
-  boot.isContainer = true;
+    # Use the boot drive for grub
+    boot.loader.grub.enable = lib.mkDefault true;
+    boot.loader.grub.devices = [ "nodev" ];
 
-  # COMPATIBILITY: Create /bin/bash to allow "pct exec" to work
-  system.activationScripts.binbash = {
-    deps = [ ];
-    text = ''
-      mkdir -m 0755 -p /bin
-      ln -sfn ${pkgs.bash}/bin/bash /bin/bash
-      ln -sfn ${pkgs.bash}/bin/bash /bin/sh
-    '';
-  };
+    boot.growPartition = lib.mkDefault true;
 
-  # Standard Root setup
-  users.users.root = {
-    initialHashedPassword = ""; # Empty password for console access
-    openssh.authorizedKeys.keys = [
-      # Optional: Add your SSH key here for instant access
+    # Allow remote updates with flakes and non-root users
+    nix.settings.trusted-users = [
+      "root"
+      "@wheel"
+      "reinhard"
     ];
-  };
 
-  # User Configuration: 'nixos' with passwordless sudo
-  users.users.nixos = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable sudo
-    initialHashedPassword = ""; # Empty password initially
-    openssh.authorizedKeys.keys = [
-      # Add your SSH key here
+    nix.settings.experimental-features = [
+      "nix-command"
+      "flakes"
     ];
+
+    # Enable mDNS for `hostname.local` addresses
+    services.avahi.enable = true;
+    services.avahi.nssmdns = true;
+    services.avahi.publish = {
+      enable = true;
+      addresses = true;
+    };
+
+    # Some sane packages we need on every system
+    environment.systemPackages = with pkgs; [
+      vim # for emergencies
+      git # for pulling nix flakes
+      python3 # for ansible
+    ];
+
+    # COMPATIBILITY: Create /bin/bash to allow "pct exec" to work
+    system.activationScripts.binbash = {
+      deps = [ ];
+      text = ''
+        mkdir -m 0755 -p /bin
+        ln -sfn ${pkgs.bash}/bin/bash /bin/bash
+        ln -sfn ${pkgs.bash}/bin/bash /bin/sh
+      '';
+    };
+
+    # Don't ask for passwords
+    security.sudo.wheelNeedsPassword = false;
+
+    # Enable ssh
+    services.openssh = {
+      enable = true;
+      settings.PasswordAuthentication = false;
+      settings.KbdInteractiveAuthentication = false;
+    };
+    programs.ssh.startAgent = true;
+
+    # Default filesystem
+    fileSystems."/" = lib.mkDefault {
+      device = "/dev/disk/by-label/nixos";
+      autoResize = true;
+      fsType = "ext4";
+    };
+
+    system.stateVersion = lib.mkDefault "24.05";
   };
-
-  # Passwordless sudo for the "wheel" group
-  security.sudo.wheelNeedsPassword = false;
-
-  # Automatic Login for user 'nixos'
-  services.getty.autologinUser = "nixos";
-
-  # Allow login with empty password (optional, for console convenience)
-  security.pam.services.sshd.allowNullPassword = true;
-  security.pam.services.login.allowNullPassword = true;
-
-  # Enable SSH so you can access it remotely
-  services.openssh = {
-    enable = true;
-    settings.PermitRootLogin = "yes";
-  };
-
-  system.stateVersion = "25.11";
 }

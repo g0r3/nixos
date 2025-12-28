@@ -12,7 +12,7 @@
           cupswrapper = mfcl3750cdw_org.cupswrapper.overrideAttrs (oldAttrs: {
             # This appends your patch command to the build process
             postPatch = (oldAttrs.postPatch or "") + ''
-              echo "Applying custom patch to brmfcl3750cdwrc..."
+              echo "Applying modules patch to brmfcl3750cdwrc..."
               substituteInPlace 'opt/brother/Printers/mfcl3750cdw/inf/brmfcl3750cdwrc' \
                 --replace "PaperType=Letter" "PaperType=A4"
             '';

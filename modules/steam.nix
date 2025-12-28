@@ -41,8 +41,6 @@ let
 
 in
 {
-  nixpkgs.config.allowUnfree = true;
-
   programs = {
     gamescope = {
       enable = true;
@@ -50,7 +48,7 @@ in
     };
     steam = {
       enable = true;
-      # FIX 1: Tell the steam module to use your custom package.
+      # FIX 1: Tell the steam module to use your modules package.
       package = steam-with-fixed-drivers;
       gamescopeSession.enable = true;
     };
@@ -66,7 +64,7 @@ in
         "PATH=/run/current-system/sw/bin"
       ];
       ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
-      # FIX 2: Make the systemd service launch your custom package.
+      # FIX 2: Make the systemd service launch your modules package.
       ExecStart = "${steam-with-fixed-drivers}/bin/steam -nochatui -nofriendsui -silent %U";
       Restart = "on-failure";
       RestartSec = "5s";

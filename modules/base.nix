@@ -8,6 +8,7 @@
     jq
     mlocate
     ethtool
+    gnumake
     screen
     hdparm
     dig

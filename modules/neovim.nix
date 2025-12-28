@@ -1,6 +1,6 @@
 { pkgs, ... }:
 {
-  programs.nix-ld.enable = true;
+  programs.nix-ld.enable = true; # Make the plugins compatible with nixos paths
   environment.systemPackages = with pkgs; [
     lua5_1
     lua51Packages.luarocks
@@ -11,8 +11,6 @@
       ]
     ))
     ruff # also needed for git precommit
-    # stylua
-    # lua-language-server
     wl-clipboard
     ripgrep
     nixfmt-rfc-style

@@ -29,15 +29,10 @@ in
   ];
 
   # rstaudacher.nixbuilder.enable = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
   nix.settings.trusted-users = [
     "rstaudacher"
     "root"
   ];
-  nixpkgs.config.allowUnfree = true;
   networking.hostName = "ENG-rstaudacher";
   system.stateVersion = "25.05";
   time.timeZone = "Europe/Vienna";
@@ -62,6 +57,15 @@ in
       shell = pkgs.zsh;
     };
   };
+
+  modules = {
+    bitwarden.enable = true;
+    neovim.enable = true;
+  };
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "openssl-1.1.1w"
+  ];
 
   # fingerprint reader
   services.fprintd = {

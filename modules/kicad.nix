@@ -2,13 +2,16 @@
   config,
   pkgs,
   lib,
+  inputs,
+  isNixos,
+  isDarwin,
   ...
 }:
 
 with lib;
 
 let
-  cfg = config.custom.kicad;
+  cfg = config.modules.kicad;
 
   KicadModTree = pkgs.python312Packages.buildPythonPackage rec {
     pname = "KicadModTree";
@@ -53,12 +56,35 @@ let
 
 in
 {
-  options.custom.kicad.enable = mkEnableOption "Enable KiCad and related tools";
+  options.modules.kicad.enable = mkEnableOption "Enable KiCad and related tools";
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      kicad
-      jlc2kicadlib
-    ];
-  };
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      # --- macOS / Darwin Configuration ---
+      (lib.optionalAttrs isDarwin {
+        homebrew = {
+          enable = true;
+          casks = [
+            "kicad" # broken on nix-darwin
+          ];
+          onActivation.cleanup = "zap";
+          onActivation.autoUpdate = true;
+          onActivation.upgrade = true;
+        };
+      })
+
+      # --- Linux / Systemd Configuration ---
+      (lib.optionalAttrs isNixos {
+        environment.systemPackages = with pkgs; [
+          kicad
+        ];
+      })
+
+      # --- Common Configuration ---
+      {
+        environment.systemPackages = [ jlc2kicadlib ];
+      }
+    ]
+  );
+
 }

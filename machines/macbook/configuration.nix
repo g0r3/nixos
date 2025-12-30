@@ -41,6 +41,7 @@
     brave
     spotify
     mas
+    stow
     # displaylink
   ];
 
@@ -103,6 +104,11 @@
     controlcenter.Sound = true;
     WindowManager.EnableTiledWindowMargins = true;
     WindowManager.StandardHideWidgets = true;
+    finder.NewWindowTarget = "Home";
+    finder.ShowExternalHardDrivesOnDesktop = true;
+    finder.ShowHardDrivesOnDesktop = true;
+    finder.ShowMountedServersOnDesktop = true;
+    finder._FXSortFoldersFirst = true;
   };
   system.startup.chime = false;
   system.keyboard.enableKeyMapping = true;

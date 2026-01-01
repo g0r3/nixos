@@ -42,6 +42,8 @@
     spotify
     mas
     stow
+    neofetch
+    gemini-cli-bin
     # displaylink
   ];
 

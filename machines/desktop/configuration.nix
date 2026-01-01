@@ -56,9 +56,10 @@
     pavucontrol
     pamixer
     alsa-utils
+    neofetch
     stow
     clang
-    gemini-cli
+    gemini-cli-bin
     nurl # generates Nix fetcher calls
     ipcalc
   ];

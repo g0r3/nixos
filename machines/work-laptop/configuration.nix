@@ -96,9 +96,10 @@ in
       color=#505050
     '')
     alsa-utils
+    neofetch
     stow
     clang
-    gemini-cli
+    gemini-cli-bin
     barracudavpn
     nurl # generates Nix fetcher calls
     python314

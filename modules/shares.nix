@@ -50,18 +50,31 @@ let
 
   # Darwin Configuration
   darwinConfig = {
-    environment.etc.fstab.text =
-      let
-        mountOptions = "rw,soft,bg,timeo=15";
-        mkEntry = share: "${share.device} ${basePath}${share.mountPoint} nfs ${mountOptions} 0 0";
-      in
-      lib.concatMapStringsSep "\n" mkEntry shares + "\n";
-
     system.activationScripts.createMountPoints.text = ''
       echo "Creating mount points..."
       ${lib.concatMapStringsSep "\n" (share: "mkdir -p ${basePath}${share.mountPoint}") shares}
       chown reinhard:staff ${basePath}/*
     '';
+
+    launchd.daemons.nfs-mounts = {
+      serviceConfig = {
+        Label = "net.staudacher.nfs-mounts";
+        RunAtLoad = true;
+        KeepAlive = {
+          NetworkState = true;
+        };
+      };
+      script = ''
+        ${lib.concatMapStringsSep "\n" (share: ''
+          if ! mount | grep -q "${basePath}${share.mountPoint}"; then
+            echo "Mounting ${share.mountPoint}..."
+            mount -t nfs -o rw,soft,bg,timeo=15 ${share.device} ${basePath}${share.mountPoint}
+          else
+            echo "${share.mountPoint} is already mounted."
+          fi
+        '') shares}
+      '';
+    };
   };
 in
 if isDarwin then darwinConfig else nixosConfig

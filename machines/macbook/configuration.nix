@@ -10,7 +10,7 @@
     inputs.nix-homebrew.darwinModules.nix-homebrew
     ../../modules/bitwarden.nix
     # ../../modules/steam.nix
-    # ../../modules/shares.nix
+    ../../modules/shares.nix
     ../../modules/zsh.nix
     # ../../modules/printer.nix
     # ../../modules/maintenance.nix

@@ -50,12 +50,6 @@ let
 
   # Darwin Configuration
   darwinConfig = {
-    system.activationScripts.createMountPoints.text = ''
-      echo "Creating mount points..."
-      ${lib.concatMapStringsSep "\n" (share: "mkdir -p ${basePath}${share.mountPoint}") shares}
-      chown reinhard:staff ${basePath}/*
-    '';
-
     launchd.daemons.nfs-mounts = {
       serviceConfig = {
         Label = "net.staudacher.nfs-mounts";
@@ -63,12 +57,20 @@ let
         KeepAlive = {
           NetworkState = true;
         };
+        StandardOutPath = "/var/log/nfs-mounts.log";
+        StandardErrorPath = "/var/log/nfs-mounts.err";
       };
+      path = [ "/run/current-system/sw/bin" "/usr/bin" "/bin" "/usr/sbin" "/sbin" ];
       script = ''
         ${lib.concatMapStringsSep "\n" (share: ''
+          # Create mount point
+          mkdir -p "${basePath}${share.mountPoint}"
+          chown reinhard:staff "${basePath}${share.mountPoint}"
+
+          # Mount if not already mounted
           if ! mount | grep -q "${basePath}${share.mountPoint}"; then
             echo "Mounting ${share.mountPoint}..."
-            mount -t nfs -o rw,soft,bg,timeo=15 ${share.device} ${basePath}${share.mountPoint}
+            mount -t nfs -o rw,soft,bg,timeo=15 ${share.device} "${basePath}${share.mountPoint}"
           else
             echo "${share.mountPoint} is already mounted."
           fi

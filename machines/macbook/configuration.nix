@@ -84,13 +84,13 @@
     dock.autohide = true;
     dock.persistent-apps = [
       # Apps pinned in dock
-      "${pkgs.wezterm}/Applications/Wezterm.app"
-      "${pkgs.brave}/Applications/Brave Browser.app"
+      "/Application/Nix Apps/Wezterm.app"
+      "/Applications/Nix Apps/Brave Browser.app"
       "/System/Applications/Mail.app"
       "/System/Applications/Calendar.app"
       "/System/Applications/Contacts.app"
       "/System/Applications/App Store.app"
-      "${pkgs.spotify}/Applications/Spotify.app"
+      "/Applications/Nix Apps/Spotify.app"
       "/System/Applications/System Settings.app"
     ];
     dock.minimize-to-application = true;

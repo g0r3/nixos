@@ -84,8 +84,8 @@
     dock.autohide = true;
     dock.persistent-apps = [
       # Apps pinned in dock
-      "/Applications/Nix Apps/Wezterm.app"
       "/Applications/Nix Apps/Brave Browser.app"
+      "/Applications/Nix Apps/Wezterm.app"
       "/System/Applications/Mail.app"
       "/System/Applications/Calendar.app"
       "/System/Applications/Contacts.app"

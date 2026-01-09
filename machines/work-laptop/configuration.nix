@@ -63,6 +63,12 @@ in
     neovim.enable = true;
   };
 
+  boot.blacklistedKernelModules = [
+    "intel_ipu6"
+    "intel_ipu6_isys"
+    "intel_ipu6_psys"
+  ];
+
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"
   ];

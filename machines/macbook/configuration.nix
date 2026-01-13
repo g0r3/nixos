@@ -60,6 +60,7 @@
       # Only for those that are not worth their own module
     ];
     casks = [
+      "steam"
       # Add your GUI-apps here
       # Only for those that are not worth their own module
     ];

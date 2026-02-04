@@ -93,13 +93,15 @@ rec {
       substituteInPlace ${reldir}/cupswrapper/brother_lpdwrapper_${model} \
         --replace /usr/bin/perl ${perl}/bin/perl \
         --replace "basedir =~" "basedir = \"$basedir\"; #" \
-        --replace "PRINTER =~" "PRINTER = \"${model}\"; #"
+        --replace "PRINTER =~" "PRINTER = \"${model}\"; #" \
+        --replace "Letter" "A4"
       substituteInPlace 'opt/brother/Printers/mfcl3750cdw/inf/brmfcl3750cdwrc' \
         --replace "Letter" "A4"
       substituteInPlace 'opt/brother/Printers/mfcl3750cdw/cupswrapper/brother_mfcl3750cdw_printer_en.ppd' \
         --replace "*DefaultPageSize: Letter" "*DefaultPageSize: A4" \
         --replace "*DefaultImageableArea: Letter" "*DefaultImageableArea: A4" \
-        --replace "*DefaultPaperDimension: Letter" "*DefaultPaperDimension: A4"
+        --replace "*DefaultPaperDimension: Letter" "*DefaultPaperDimension: A4" \
+        --replace "*DefaultPageRegion: Letter" "*DefaultPageRegion: A4"
     '';
 
     installPhase = ''

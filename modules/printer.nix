@@ -1,30 +1,12 @@
 { pkgs, ... }:
 
+let
+  mfcl3750cdw = pkgs.callPackage ../packages/mfcl3750cdw/package.nix { };
+in
 {
-  nixpkgs.overlays = [
-    (
-      final: prev:
-      let
-        mfcl3750cdw_org = final.callPackage ../packages/mfcl3750cdw/package.nix { };
-      in
-      {
-        mfcl3750cdw = mfcl3750cdw_org // {
-          cupswrapper = mfcl3750cdw_org.cupswrapper.overrideAttrs (oldAttrs: {
-            # This appends your patch command to the build process
-            postPatch = (oldAttrs.postPatch or "") + ''
-              echo "Applying modules patch to brmfcl3750cdwrc..."
-              substituteInPlace 'opt/brother/Printers/mfcl3750cdw/inf/brmfcl3750cdwrc' \
-                --replace "PaperType=Letter" "PaperType=A4"
-            '';
-          });
-        };
-      }
-    )
-  ];
-
   services.printing = {
     enable = true;
-    drivers = [ pkgs.mfcl3750cdw.cupswrapper ];
+    drivers = [ mfcl3750cdw.cupswrapper ];
   };
   hardware = {
     printers = {

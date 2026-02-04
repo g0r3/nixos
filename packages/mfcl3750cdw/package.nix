@@ -95,7 +95,9 @@ rec {
         --replace "basedir =~" "basedir = \"$basedir\"; #" \
         --replace "PRINTER =~" "PRINTER = \"${model}\"; #"
       substituteInPlace 'opt/brother/Printers/mfcl3750cdw/inf/brmfcl3750cdwrc' \
-        --replace "PageSize=Letter" "PageSize=A4"
+        --replace "Letter" "A4"
+      substituteInPlace 'opt/brother/Printers/mfcl3750cdw/cupswrapper/brother_mfcl3750cdw_printer_en.ppd' \
+        --replace "Letter" "A4"
     '';
 
     installPhase = ''

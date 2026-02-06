@@ -1,12 +1,8 @@
 { pkgs, ... }:
 
-let
-  mfcl3750cdw = pkgs.callPackage ../packages/mfcl3750cdw/package.nix { };
-in
 {
   services.printing = {
     enable = true;
-    drivers = [ mfcl3750cdw.cupswrapper ];
   };
   hardware = {
     printers = {
@@ -14,7 +10,7 @@ in
       ensurePrinters = [
         {
           name = "Brother_MFC_L3750CDW";
-          model = "brother_mfcl3750cdw_printer_en.ppd";
+          model = "everywhere";
           location = "Living Room";
           description = "Brother MFC-L3750CDW";
           deviceUri = "ipp://printer.staudacher.dev/ipp/print";

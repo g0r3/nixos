@@ -50,7 +50,7 @@ in
           ))
           ruff # also needed for git precommit
           ripgrep
-          nixfmt-rfc-style
+          # nixfmt
           jd-diff-patch
         ];
       }

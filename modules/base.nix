@@ -18,6 +18,7 @@
       screen
       dig
       git
+      git-lfs
       unzip
       zsh
       nurl
@@ -35,3 +36,4 @@
       usbutils
     ];
 }
+

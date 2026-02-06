@@ -78,6 +78,26 @@ in
         environment.systemPackages = with pkgs; [
           kicad
         ];
+        system.activationScripts.kicadSetup = {
+          text = ''
+            # 1. Define the path manually (since $HOME is /root here)
+            KICAD_CONFIG="/home/reinhard/.config/kicad"
+
+            # 2. Create the directory if it doesn't exist
+            if [ ! -d "$KICAD_CONFIG" ]; then
+              echo "Creating KiCad config directory..."
+              mkdir -p "$KICAD_CONFIG"
+            fi
+
+            # 3. Force Write Permissions (Fixes the read-only copy issue)
+            ${pkgs.coreutils}/bin/chmod -R u+w "$KICAD_CONFIG"
+
+            # 4. Fix Ownership 
+            # (Crucial because 'mkdir' above ran as root)
+            ${pkgs.coreutils}/bin/chown -R reinhard:users "$KICAD_CONFIG"
+          '';
+          deps = [ ];
+        };
       })
 
       # --- Common Configuration ---

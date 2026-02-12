@@ -58,12 +58,21 @@ in
     };
   };
 
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # Required for modern Intel GPUs
+      libvdpau-va-gl
+    ];
+  };
+
   modules = {
     bitwarden.enable = true;
     neovim.enable = true;
   };
 
   boot.blacklistedKernelModules = [
+    # disable integrated webcam
     "intel_ipu6"
     "intel_ipu6_isys"
     "intel_ipu6_psys"

@@ -25,13 +25,27 @@
   boot.initrd.kernelModules = [
     "cryptd"
     "evdi"
+    "i915"
   ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  hardware.firmware = [ pkgs.linux-firmware ];
 
   boot.initrd.luks.devices."luksfs".device = "/dev/disk/by-partlabel/luks";
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.tpm2.enable = true;
+
+  boot.kernelParams = [
+    # Fixes the "Atomic update failure" and flickering/lag (Thunderbolt dock)
+    "i915.enable_psr=0"
+    # Ensures the new Meteor Lake Xe graphics architecture uses the right firmware
+    "i915.enable_guc=3"
+    # Optional: helps with bandwidth management on some Dell docks
+    "intel_iommu=on"
+  ];
+
+  # Ensure you have the latest firmware for Meteor Lake
+  hardware.firmware = [ pkgs.linux-firmware ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/NIXOS";

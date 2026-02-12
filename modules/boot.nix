@@ -9,6 +9,8 @@
   boot.kernelParams = [
     "quiet"
     "loglevel=3"
+    "amd_pstate=active"
   ];
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.kernelModules = [ ];
 }

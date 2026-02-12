@@ -96,6 +96,8 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
+  zramSwap.enable = true;
+
   # security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

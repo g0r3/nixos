@@ -100,6 +100,7 @@ in
   environment.systemPackages = with pkgs; [
     pavucontrol
     zoom-us
+    teams-for-linux
     displaylink
     slack
     freerdp

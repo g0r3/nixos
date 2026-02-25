@@ -24,6 +24,7 @@ in
     ../../modules/zsh.nix
     ../../modules/maintenance.nix
     ../../modules/neovim.nix
+    ../../modules/displaylink.nix
     ../../modules/vscode.nix
     ../../modules/nixbuilder.nix
   ];
@@ -69,6 +70,7 @@ in
   modules = {
     bitwarden.enable = true;
     neovim.enable = true;
+    displaylink.enable = true;
   };
 
   boot.blacklistedKernelModules = [
@@ -102,7 +104,6 @@ in
     pavucontrol
     zoom-us
     teams-for-linux
-    displaylink
     slack
     freerdp
     realvnc-vnc-viewer
@@ -136,7 +137,6 @@ in
     variant = "de_se_fi";
   };
   services.xserver.videoDrivers = [
-    "displaylink"
     "modesetting"
   ];
   networking.networkmanager.enable = true;

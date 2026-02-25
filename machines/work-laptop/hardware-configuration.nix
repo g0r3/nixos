@@ -24,7 +24,6 @@
   ];
   boot.initrd.kernelModules = [
     "cryptd"
-    "evdi"
     "i915"
   ];
   boot.kernelModules = [ "kvm-intel" ];

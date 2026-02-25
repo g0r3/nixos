@@ -25,7 +25,12 @@ in
       # Search for "libfprint" in packages to find other drivers
       tod.driver = libfprint-2-tod1-broadcom-cv3plus;
     };
-    security.pam.services.sddm.fprintAuth = true;
+    # Disable fingerprint auth for SDDM and KDE/login to prevent the 30s hang
+    security.pam.services.sddm.fprintAuth = false;
+
+    # If you are using KDE Plasma, also add:
+    security.pam.services.kde.fprintAuth = false;
+    security.pam.services.login.fprintAuth = false;
 
     systemd.services.fprintd.serviceConfig = {
       BindReadOnlyPaths = [

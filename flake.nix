@@ -58,7 +58,7 @@
     {
       nixosConfigurations = {
         desktop = mkNixSystem ./machines/desktop/configuration.nix;
-        work-laptop = mkNixSystem ./machines/work-laptop/configuration.nix;
+        ENG-rstaudacher = mkNixSystem ./machines/ENG-rstaudacher/configuration.nix;
         # arr = mkNixSystem ./machines/homelab/arr/configuration.nix;
       };
       darwinConfigurations = {

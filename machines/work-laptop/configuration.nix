@@ -90,6 +90,7 @@ in
     # Search for "libfprint" in packages to find other drivers
     tod.driver = libfprint-2-tod1-broadcom-cv3plus;
   };
+  security.pam.services.sddm.fprintAuth = true;
 
   systemd.services.fprintd.serviceConfig = {
     BindReadOnlyPaths = [
@@ -170,7 +171,7 @@ in
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  # security.rtkit.enable = true;
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;

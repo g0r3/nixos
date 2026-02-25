@@ -44,9 +44,6 @@
     "intel_iommu=on"
   ];
 
-  # Ensure you have the latest firmware for Meteor Lake
-  hardware.firmware = [ pkgs.linux-firmware ];
-
   fileSystems."/" = {
     device = "/dev/disk/by-label/NIXOS";
     fsType = "btrfs";

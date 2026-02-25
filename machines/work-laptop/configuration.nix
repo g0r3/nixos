@@ -8,9 +8,6 @@
 }:
 let
   barracudavpn = pkgs.callPackage ../../packages/barracudavpn/default.nix { };
-  libfprint-2-tod1-broadcom-cv3plus =
-    pkgs.callPackage ../../packages/libfprint-2-tod1-broadcom-cv3plus/package.nix
-      { };
 in
 {
 
@@ -25,6 +22,7 @@ in
     ../../modules/maintenance.nix
     ../../modules/neovim.nix
     ../../modules/displaylink.nix
+    ../../modules/dell-fingerprint.nix
     ../../modules/vscode.nix
     ../../modules/nixbuilder.nix
   ];
@@ -71,6 +69,7 @@ in
     bitwarden.enable = true;
     neovim.enable = true;
     displaylink.enable = true;
+    dell-fingerprint.enable = true;
   };
 
   boot.blacklistedKernelModules = [
@@ -83,22 +82,6 @@ in
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"
   ];
-
-  # fingerprint reader
-  services.fprintd = {
-    enable = true;
-    package = pkgs.fprintd-tod;
-    tod.enable = true;
-    # Search for "libfprint" in packages to find other drivers
-    tod.driver = libfprint-2-tod1-broadcom-cv3plus;
-  };
-  security.pam.services.sddm.fprintAuth = true;
-
-  systemd.services.fprintd.serviceConfig = {
-    BindReadOnlyPaths = [
-      "${libfprint-2-tod1-broadcom-cv3plus}${libfprint-2-tod1-broadcom-cv3plus.passthru.firmwarePath}:/var/lib/fprint/.broadcomCv3plusFW"
-    ];
-  };
 
   environment.systemPackages = with pkgs; [
     pavucontrol

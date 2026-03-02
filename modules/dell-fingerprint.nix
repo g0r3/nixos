@@ -11,10 +11,8 @@ let
   libfprint-2-tod1-broadcom-cv3plus =
     pkgs.callPackage ../packages/libfprint-2-tod1-broadcom-cv3plus/package.nix
       { };
-
 in
 {
-
   options.modules.dell-fingerprint.enable = lib.mkEnableOption "Whether to enable the dell-fingerprint module";
 
   config = lib.mkIf cfg.enable {
@@ -25,12 +23,12 @@ in
       # Search for "libfprint" in packages to find other drivers
       tod.driver = libfprint-2-tod1-broadcom-cv3plus;
     };
-    # Disable fingerprint auth for SDDM and KDE/login to prevent the 30s hang
+    # 1. Disable fingerprint for SDDM and Login to prevent the 30-second pause
     security.pam.services.sddm.fprintAuth = false;
-
-    # If you are using KDE Plasma, also add:
-    security.pam.services.kde.fprintAuth = false;
     security.pam.services.login.fprintAuth = false;
+
+    # 2. Allow fingerprint to instantly unlock the PC from the lock screen
+    security.pam.services.kscreenlocker.fprintAuth = true;
 
     systemd.services.fprintd.serviceConfig = {
       BindReadOnlyPaths = [

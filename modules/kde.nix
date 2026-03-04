@@ -5,7 +5,7 @@
     (final: prev: {
       shutdown-or-switch = final.callPackage ../packages/shutdown-or-switch/package.nix { };
       plasma6-window-title-applet =
-        final.callPackage ../packages/plasma6-windows-title-applet/package.nix
+        final.callPackage ../packages/plasma6-window-title-applet/package.nix
           { };
     })
   ];

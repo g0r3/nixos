@@ -9,7 +9,7 @@
     spotify
     sublime3
     obsidian
-    libreoffice-qt-still
+    # libreoffice-qt-still
     gnome-disk-utility
     system-config-printer
   ];

@@ -7,8 +7,8 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "windows-title-applet";
-  version = "0.7.1-3";
+  pname = "plasma6-window-title-applet";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "dhruv8sh";
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "KDE Plasma6 applet that shows the current window title and icon in your panels";
-    homepage = "https://github.com/psifidotos/applet-window-title";
+    homepage = "https://github.com/dhruv8sh/plasma6-window-title-applet";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ "Rstaudacher" ];
     inherit (kdePackages.kwindowsystem.meta) platforms;

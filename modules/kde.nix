@@ -4,7 +4,9 @@
   nixpkgs.overlays = [
     (final: prev: {
       shutdown-or-switch = final.callPackage ../packages/shutdown-or-switch/package.nix { };
-      window-title-applet = final.callPackage ../packages/window-title-applet/package.nix { };
+      plasma6-window-title-applet =
+        final.callPackage ../packages/plasma6-windows-title-applet/package.nix
+          { };
     })
   ];
 
@@ -26,7 +28,7 @@
   # KDE-related packages and themes
   environment.systemPackages = with pkgs; [
     shutdown-or-switch
-    window-title-applet
+    plasma6-window-title-applet
     kdePackages.merkuro
     kdePackages.sddm-kcm
     kdePackages.kcolorchooser

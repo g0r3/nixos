@@ -18,6 +18,7 @@ in
     ../../modules/base-desktop.nix
     ../../modules/kde.nix
     ../../modules/bitwarden.nix
+    ../../modules/docker.nix
     ../../modules/zsh.nix
     ../../modules/maintenance.nix
     ../../modules/neovim.nix
@@ -70,6 +71,7 @@ in
     neovim.enable = true;
     displaylink.enable = true;
     dell-fingerprint.enable = true;
+    docker.enable = true;
   };
 
   boot.blacklistedKernelModules = [
@@ -86,6 +88,7 @@ in
   environment.systemPackages = with pkgs; [
     pavucontrol
     zoom-us
+    claude-code
     teams-for-linux
     slack
     freerdp

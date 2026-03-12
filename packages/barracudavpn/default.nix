@@ -4,6 +4,9 @@
   fetchurl,
   binutils-unwrapped,
   autoPatchelfHook,
+  makeWrapper,
+  iproute2,
+  kmod,
   zstd,
   version ? "5.3.5",
 }:
@@ -71,6 +74,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     binutils-unwrapped
     autoPatchelfHook
+    makeWrapper
     zstd
   ];
 
@@ -90,6 +94,8 @@ stdenv.mkDerivation {
       --replace 'sudo barracudavpn' "sudo $out/bin/barracudavpn" \
       --replace ' barracudavpn.conf ' " $out/config/barracudavpn.conf "
     install -Dm755 bcvpn-hack $out/bin/bcvpn-hack
+    wrapProgram "$out/bin/barracudavpn" \
+      --prefix PATH : "${lib.makeBinPath [ iproute2 kmod ]}"
   '';
 
   doCheckInstall = true;

@@ -32,6 +32,7 @@ in
               "GTK_USE_PORTAL=0"
               "PATH=/run/current-system/sw/bin"
             ];
+            ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
             ExecStart = "${pkgs.bitwarden-desktop}/bin/bitwarden";
             Restart = "on-failure";
             RestartSec = "5s";

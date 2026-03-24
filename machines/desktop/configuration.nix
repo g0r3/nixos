@@ -56,7 +56,6 @@
     pavucontrol
     pamixer
     alsa-utils
-    neofetch
     stow
     clang
     gemini-cli-bin

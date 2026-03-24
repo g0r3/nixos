@@ -100,7 +100,6 @@ in
       color=#505050
     '')
     alsa-utils
-    neofetch
     stow
     clang
     gemini-cli-bin

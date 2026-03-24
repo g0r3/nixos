@@ -24,6 +24,7 @@
     ../../modules/neovim.nix
     ../../modules/base.nix
     ../../modules/prusa.nix
+    ../../modules/wireplumber.nix
   ];
 
   networking.hostName = "desktop";
@@ -51,6 +52,11 @@
     };
   };
 
+  # ZSH env vars (moved from dotfiles .zshenv)
+  programs.zsh.shellInit = ''
+    export PATH="$PATH:$HOME/.local/bin:$HOME/go/bin"
+  '';
+
   environment.systemPackages = with pkgs; [
     android-tools
     pavucontrol
@@ -65,6 +71,7 @@
 
   modules = {
     bitwarden.enable = true;
+    bitwarden.sshAgentSocket = "$HOME/.bitwarden-ssh-agent.sock";
     ferdium.enable = true;
     prusa.enable = true;
     neovim.enable = true;
@@ -96,6 +103,28 @@
   hardware.bluetooth.powerOnBoot = true;
 
   zramSwap.enable = true;
+
+  # Rename built-in speakers for Plasma PA
+  services.pipewire.wireplumber.extraConfig."00-plasma-pa" = {
+    "monitor.alsa.rules" = [
+      {
+        matches = [
+          {
+            "node.name" = "alsa_output.pci-0000_1a_00.6.analog-stereo";
+            "port.monitor" = "!true";
+          }
+        ];
+        actions.update-props = {
+          "alsa.card_name" = "Speakers";
+          "alsa.long_card_name" = "Speakers";
+          "device.description" = "Speakers";
+          "device.name" = "Speakers";
+          "node.description" = "Speakers";
+          "node.nick" = "Speakers";
+        };
+      }
+    ];
+  };
 
   # security.rtkit.enable = true;
   services.pipewire = {

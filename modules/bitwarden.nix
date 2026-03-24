@@ -11,7 +11,15 @@ let
   cfg = config.modules.bitwarden;
 in
 {
-  options.modules.bitwarden.enable = lib.mkEnableOption "Whether to enable the Bitwarden module";
+  options.modules.bitwarden = {
+    enable = lib.mkEnableOption "Whether to enable the Bitwarden module";
+    sshAgentSocket = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "$HOME/.bitwarden-ssh-agent.sock";
+      description = "Path to the Bitwarden SSH agent socket. Sets SSH_AUTH_SOCK when non-null.";
+    };
+  };
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
@@ -42,6 +50,11 @@ in
       {
         environment.systemPackages = [ pkgs.bitwarden-desktop ];
       }
+      (lib.mkIf (cfg.sshAgentSocket != null) {
+        programs.zsh.shellInit = ''
+          export SSH_AUTH_SOCK="${cfg.sshAgentSocket}"
+        '';
+      })
     ]
   );
 }

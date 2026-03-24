@@ -26,6 +26,7 @@ in
     ../../modules/dell-fingerprint.nix
     ../../modules/vscode.nix
     ../../modules/nixbuilder.nix
+    ../../modules/wireplumber.nix
   ];
 
   # rstaudacher.nixbuilder.enable = true;
@@ -84,6 +85,15 @@ in
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"
   ];
+
+  # ZSH env vars (moved from dotfiles .zshenv/.zshrc)
+  programs.zsh.shellInit = ''
+    export PATH="$PATH:$HOME/.local/bin:$HOME/go/bin:$HOME/dev/repos/mystuff/bin"
+  '';
+
+  environment.variables = {
+    VAULT_ADDR = "https://qda-vault.qa.ngdev.eu.ad.cuda-inc.com:8200";
+  };
 
   environment.systemPackages = with pkgs; [
     pavucontrol

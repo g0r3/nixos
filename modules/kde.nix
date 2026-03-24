@@ -10,6 +10,8 @@
     })
   ];
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
   # Enable KDE Plasma 6
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;

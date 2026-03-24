@@ -89,7 +89,6 @@ in
     pavucontrol
     zoom-us
     claude-code
-    teams-for-linux
     slack
     freerdp
     realvnc-vnc-viewer

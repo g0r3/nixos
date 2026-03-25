@@ -37,7 +37,6 @@ in
           partOf = [ "graphical-session.target" ];
           serviceConfig = {
             Environment = [
-              "GTK_USE_PORTAL=0"
               "PATH=/run/current-system/sw/bin"
             ];
             ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";

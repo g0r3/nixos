@@ -29,7 +29,14 @@
     "52-bluetooth-defaults" = {
       "monitor.bluez.properties" = {
         "bluez5.auto-connect" = [ "a2dp_sink" "hfp_hf" ];
-        "bluez5.hw-offload-sco" = true;
+        "bluez5.hw-offload-sco" = false;
+      };
+    };
+    "53-disable-ldac" = {
+      # LDAC decoder (libldac-dec) fails on PipeWire 1.6.2, breaking the
+      # entire LDAC codec including the encoder. Disable until nixpkgs fixes it.
+      "monitor.bluez.properties" = {
+        "bluez5.codecs" = [ "sbc" "sbc_xq" "aac" "aptx" "aptx_hd" "aptx_ll" "aptx_ll_duplex" "msbc" "cvsd" ];
       };
     };
   };

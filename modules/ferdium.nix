@@ -42,6 +42,7 @@ in
             Environment = [
               "PATH=/run/current-system/sw/bin"
             ];
+            ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
             ExecStart = "${pkgs.ferdium}/bin/ferdium";
             Restart = "on-failure";
             RestartSec = "5s";

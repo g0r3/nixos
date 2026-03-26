@@ -1,8 +1,18 @@
 { pkgs, ... }:
 
+let
+  # Patch CUPS to handle Brother's nameWithLanguage/textWithLanguage IPP encoding
+  # and emit cupsIPPSupplies in generated PPDs for IPP Everywhere printers.
+  cups-patched = pkgs.cups.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [
+      ../patches/cups-brother-marker-supply-levels.patch
+    ];
+  });
+in
 {
   services.printing = {
     enable = true;
+    package = cups-patched;
   };
   hardware = {
     printers = {

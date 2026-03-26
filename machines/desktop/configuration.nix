@@ -65,6 +65,7 @@
     stow
     clang
     gemini-cli-bin
+    claude-code
     nurl # generates Nix fetcher calls
     ipcalc
   ];

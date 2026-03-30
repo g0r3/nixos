@@ -2,13 +2,9 @@
   config,
   pkgs,
   lib,
-  self',
   inputs,
   ...
 }:
-let
-  barracudavpn = pkgs.callPackage ../../packages/barracudavpn/default.nix { };
-in
 {
 
   imports = [
@@ -27,6 +23,7 @@ in
     ../../modules/vscode.nix
     ../../modules/nixbuilder.nix
     ../../modules/wireplumber.nix
+    ../../modules/barracudavpn.nix
   ];
 
   # rstaudacher.nixbuilder.enable = true;
@@ -73,6 +70,7 @@ in
     displaylink.enable = true;
     dell-fingerprint.enable = true;
     docker.enable = true;
+    barracudavpn.enable = true;
   };
 
   boot.blacklistedKernelModules = [
@@ -112,7 +110,6 @@ in
     stow
     clang
     gemini-cli-bin
-    barracudavpn
     nurl # generates Nix fetcher calls
     python314
     ipcalc

@@ -51,6 +51,18 @@ let
         darwin-rebuild switch --flake $flakepath
       fi
     }
+    ncf() {
+      nix flake check --no-build $HOME/git/nixos
+    }
+    nb() {
+      system=$(uname -s)
+      flakepath="$HOME/git/nixos/#$(hostname)"
+      if [ "$system" = "Linux" ]; then
+        nixos-rebuild build --flake $flakepath
+      elif [ "$system" = "Darwin" ]; then
+        darwin-rebuild build --flake $flakepath
+      fi
+    }
   '';
 in
 {

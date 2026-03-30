@@ -130,12 +130,10 @@
 
   security.polkit.enable = true;
   security.pki.certificateFiles = [
-    ./folsom.crt
-    ./idefix.crt
-    ./INN-DEV.crt
-    ./ip-vix.crt
-    ./qdaca.crt
-    ./ssl_inspection.pem
+    ./certs/idefix.crt
+    ./certs/INN-DEV.crt
+    ./certs/qdaca.crt
+    ./certs/ssl_inspection.crt
   ];
 
   fileSystems."/mnt/qarepo" = {

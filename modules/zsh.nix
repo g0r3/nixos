@@ -6,6 +6,7 @@
   ...
 }:
 let
+
   myAliases = {
     l = "ls -lh --color=auto";
     ls = "ls --color=auto";
@@ -30,7 +31,6 @@ let
     vim = "nvim";
     # nixos
     ne = "pushd > /dev/null; cd $HOME/git/nixos; vim; popd > /dev/null";
-    nr = "sudo nixos-rebuild switch --flake $HOME/git/nixos/#$(hostname)";
     ns = "nix-shell";
     nsp = "nix search package";
     # gemini
@@ -38,19 +38,29 @@ let
     # convenience
     mip = "curl ip.me";
   };
+  interactiveShellInit = ''
+    gc() {
+      git commit -m "$1"
+    }
+    nr() {
+      system=$(uname -s)
+      flakepath="$HOME/git/nixos/#$(hostname)"
+      if [ "$system" = "Linux" ]; then
+        sudo nixos-rebuild switch --flake $flakepath
+      elif [ "$system" = "Darwin" ]; then
+        darwin-rebuild switch --flake $flakepath
+      fi
+    }
+  '';
 in
 {
   config = lib.mkMerge [
     (lib.optionalAttrs isDarwin {
-      programs.zsh = {
-        enableSyntaxHighlighting = true;
-        enableAutosuggestions = true;
-        interactiveShellInit = ''
-          setopt HIST_IGNORE_ALL_DUPS
-          # Manually enable autosuggestions if the option doesn't exist
-          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-        '';
-      };
+      programs.zsh.interactiveShellInit = ''
+        setopt HIST_IGNORE_ALL_DUPS
+        source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+        source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+      '';
     })
     (lib.optionalAttrs isNixos {
       system.userActivationScripts.zshrc = "touch .zshrc";
@@ -64,6 +74,7 @@ in
     })
     {
       environment.shellAliases = myAliases;
+      environment.interactiveShellInit = interactiveShellInit;
 
       environment.variables = {
         SUDO_EDITOR = "nvim";

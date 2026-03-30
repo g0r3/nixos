@@ -106,7 +106,7 @@
   system.keyboard.swapLeftCtrlAndFn = true;
   system.defaults.hitoolbox.AppleFnUsageType = "Do Nothing";
 
-  system.activationScripts.postActivation.text = ''
+  system.activationScripts.keyboard.text = ''
     # Install Custom Keyboard Layout
     echo "Installing Custom Keyboard Layout..."
     mkdir -p "/Library/Keyboard Layouts"
@@ -146,6 +146,7 @@
 
   modules = {
     zsh.enable = true;
+    printer.enable = true;
     bitwarden.enable = true;
     ferdium.enable = true;
     prusa.enable = true;

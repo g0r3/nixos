@@ -2,8 +2,6 @@
   config,
   pkgs,
   lib,
-  isNixos,
-  isDarwin,
   ...
 }:
 let

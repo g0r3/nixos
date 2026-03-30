@@ -28,7 +28,7 @@ in
       ];
     })
 
-    (lib.optionalAttrs (isDarwin) {
+    (lib.optionalAttrs isDarwin {
       # Darwin-specific; Both freecad and prusa-slicer are marked as broken packages in nix-darwin
       homebrew = {
         enable = true;

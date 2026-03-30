@@ -1,40 +1,47 @@
 # base shell programs packages every NixOS system should have
 {
+  config,
   pkgs,
   lib,
   isNixos,
   isDarwin,
   ...
 }:
+let
+  cfg = config.modules.base;
+in
 {
-  services.fwupd.enable = lib.mkIf isNixos true;
+  options.modules.base.enable = lib.mkEnableOption "Whether to enable the base module";
 
-  environment.systemPackages =
-    with pkgs;
-    [
-      # Cross-platform packages
-      wget
-      jq
-      gnumake
-      screen
-      dig
-      git
-      git-lfs
-      unzip
-      zsh
-      nurl
-      nmap
-      tree
-      python314
-    ]
-    ++ lib.optionals isNixos [
-      # Linux-only tools
-      mlocate
-      ethtool
-      hdparm
-      dmidecode
-      pciutils
-      usbutils
-    ];
+  config = lib.mkIf cfg.enable {
+    services.fwupd.enable = lib.mkIf isNixos true;
+
+    environment.systemPackages =
+      with pkgs;
+      [
+        # Cross-platform packages
+        wget
+        jq
+        gnumake
+        screen
+        dig
+        git
+        git-lfs
+        unzip
+        zsh
+        nurl
+        nmap
+        tree
+        python314
+      ]
+      ++ lib.optionals isNixos [
+        # Linux-only tools
+        mlocate
+        ethtool
+        hdparm
+        dmidecode
+        pciutils
+        usbutils
+      ];
+  };
 }
-

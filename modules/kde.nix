@@ -1,54 +1,65 @@
-{ config, pkgs, ... }:
-
 {
-  nixpkgs.overlays = [
-    (final: prev: {
-      shutdown-or-switch = final.callPackage ../packages/shutdown-or-switch/package.nix { };
-      plasma6-window-title-applet =
-        final.callPackage ../packages/plasma6-window-title-applet/package.nix
-          { };
-    })
-  ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.modules.kde;
+in
+{
+  options.modules.kde.enable = lib.mkEnableOption "Whether to enable the KDE module";
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        shutdown-or-switch = final.callPackage ../packages/shutdown-or-switch/package.nix { };
+        plasma6-window-title-applet =
+          final.callPackage ../packages/plasma6-window-title-applet/package.nix
+            { };
+      })
+    ];
 
-  # Enable KDE Plasma 6
-  hardware.graphics.enable = true;
-  hardware.graphics.enable32Bit = true;
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  services.desktopManager.plasma6.enable = true;
-  services.displayManager.defaultSession = "plasma";
+    environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
-    config.common.default = [ "kde" ];
+    # Enable KDE Plasma 6
+    hardware.graphics.enable = true;
+    hardware.graphics.enable32Bit = true;
+    services.displayManager.sddm.enable = true;
+    services.displayManager.sddm.wayland.enable = true;
+    services.desktopManager.plasma6.enable = true;
+    services.displayManager.defaultSession = "plasma";
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+      config.common.default = [ "kde" ];
+    };
+
+    environment.plasma6.excludePackages = with pkgs.kdePackages; [
+      plasma-browser-integration
+      konsole
+      elisa
+      kate
+    ];
+
+    # KDE-related packages and themes
+    environment.systemPackages = with pkgs; [
+      shutdown-or-switch
+      plasma6-window-title-applet
+      kdePackages.merkuro
+      kdePackages.sddm-kcm
+      kdePackages.kcolorchooser
+      kdePackages.kscreenlocker
+      kdePackages.kcalc
+      kdePackages.kdeconnect-kde
+      kdePackages.print-manager
+      simple-scan
+      colloid-gtk-theme
+      whitesur-kde
+      whitesur-cursors
+      whitesur-gtk-theme
+      (whitesur-icon-theme.override { alternativeIcons = true; })
+    ];
   };
-
-  environment.plasma6.excludePackages = with pkgs.kdePackages; [
-    plasma-browser-integration
-    konsole
-    elisa
-    kate
-  ];
-
-  # KDE-related packages and themes
-  environment.systemPackages = with pkgs; [
-    shutdown-or-switch
-    plasma6-window-title-applet
-    kdePackages.merkuro
-    kdePackages.sddm-kcm
-    kdePackages.kcolorchooser
-    kdePackages.kscreenlocker
-    kdePackages.kcalc
-    kdePackages.kdeconnect-kde
-    kdePackages.print-manager
-    simple-scan
-    colloid-gtk-theme
-    whitesur-kde
-    whitesur-cursors
-    whitesur-gtk-theme
-    (whitesur-icon-theme.override { alternativeIcons = true; })
-  ];
 }

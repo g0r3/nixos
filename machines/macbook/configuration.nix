@@ -8,17 +8,7 @@
 
   imports = [
     inputs.nix-homebrew.darwinModules.nix-homebrew
-    ../../modules/bitwarden.nix
-    # ../../modules/steam.nix
-    # ../../modules/shares.nix
-    ../../modules/zsh.nix
-    # ../../modules/printer.nix
-    # ../../modules/maintenance.nix
-    ../../modules/ferdium.nix
-    # ../../modules/arduino.nix # currently broken on nix-darwin
-    ../../modules/kicad.nix
-    ../../modules/neovim.nix
-    ../../modules/prusa.nix
+    ../../modules
   ];
 
   # Set Git commit hash for darwin-version.
@@ -155,6 +145,7 @@
   };
 
   modules = {
+    zsh.enable = true;
     bitwarden.enable = true;
     ferdium.enable = true;
     prusa.enable = true;

@@ -9,21 +9,7 @@
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules/boot.nix
-    ../../modules/base.nix
-    ../../modules/base-desktop.nix
-    ../../modules/kde.nix
-    ../../modules/bitwarden.nix
-    ../../modules/docker.nix
-    ../../modules/zsh.nix
-    ../../modules/maintenance.nix
-    ../../modules/neovim.nix
-    ../../modules/displaylink.nix
-    ../../modules/dell-fingerprint.nix
-    ../../modules/vscode.nix
-    ../../modules/nixbuilder.nix
-    ../../modules/wireplumber.nix
-    ../../modules/barracudavpn.nix
+    ../../modules
   ];
 
   # rstaudacher.nixbuilder.enable = true;
@@ -65,6 +51,15 @@
   };
 
   modules = {
+    base.enable = true;
+    base-desktop.enable = true;
+    boot.enable = true;
+    kde.enable = true;
+    zsh.enable = true;
+    maintenance.enable = true;
+    wireplumber.enable = true;
+    vscode.enable = true;
+    nixbuilder.enable = true;
     bitwarden.enable = true;
     neovim.enable = true;
     displaylink.enable = true;

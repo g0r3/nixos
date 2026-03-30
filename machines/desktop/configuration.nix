@@ -1,30 +1,12 @@
 {
-  config,
   pkgs,
-  lib,
-  self',
   ...
 }:
 {
 
   imports = [
     ./hardware-configuration.nix
-    ../../modules/boot.nix
-    ../../modules/bitwarden.nix
-    ../../modules/base-desktop.nix
-    ../../modules/kde.nix
-    ../../modules/steam.nix
-    ../../modules/shares.nix
-    ../../modules/zsh.nix
-    ../../modules/printer.nix
-    ../../modules/maintenance.nix
-    ../../modules/ferdium.nix
-    ../../modules/arduino.nix
-    ../../modules/kicad.nix
-    ../../modules/neovim.nix
-    ../../modules/base.nix
-    ../../modules/prusa.nix
-    ../../modules/wireplumber.nix
+    ../../modules
   ];
 
   networking.hostName = "desktop";
@@ -71,6 +53,17 @@
   ];
 
   modules = {
+    base.enable = true;
+    base-desktop.enable = true;
+    boot.enable = true;
+    kde.enable = true;
+    zsh.enable = true;
+    steam.enable = true;
+    shares.enable = true;
+    printer.enable = true;
+    maintenance.enable = true;
+    arduino.enable = true;
+    wireplumber.enable = true;
     bitwarden.enable = true;
     bitwarden.sshAgentSocket = "$HOME/.bitwarden-ssh-agent.sock";
     ferdium.enable = true;

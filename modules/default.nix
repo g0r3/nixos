@@ -1,0 +1,26 @@
+{
+  imports = [
+    ./arduino.nix
+    ./barracudavpn.nix
+    ./base-desktop.nix
+    ./base.nix
+    ./bitwarden.nix
+    ./boot.nix
+    ./dell-fingerprint.nix
+    ./displaylink.nix
+    ./docker.nix
+    ./ferdium.nix
+    ./kde.nix
+    ./kicad.nix
+    ./maintenance.nix
+    ./neovim.nix
+    ./nixbuilder.nix
+    ./printer.nix
+    ./prusa.nix
+    ./shares.nix
+    ./steam.nix
+    ./vscode.nix
+    ./wireplumber.nix
+    ./zsh.nix
+  ];
+}

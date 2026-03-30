@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   isNixos,
@@ -6,6 +7,7 @@
   ...
 }:
 let
+  cfg = config.modules.zsh;
 
   myAliases = {
     l = "ls -lh --color=auto";
@@ -66,7 +68,9 @@ let
   '';
 in
 {
-  config = lib.mkMerge [
+  options.modules.zsh.enable = lib.mkEnableOption "Whether to enable the zsh module";
+
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     (lib.optionalAttrs isDarwin {
       programs.zsh.interactiveShellInit = ''
         setopt HIST_IGNORE_ALL_DUPS
@@ -106,5 +110,5 @@ in
         oh-my-posh
       ];
     }
-  ];
+  ]);
 }

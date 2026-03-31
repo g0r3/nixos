@@ -29,8 +29,10 @@ in
         git-lfs
         unzip
         zsh
+        openssl
         nurl
         nmap
+        file
         tree
         python314
       ]

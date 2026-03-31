@@ -12,6 +12,8 @@ in
   options.modules.base-desktop.enable = lib.mkEnableOption "Whether to enable the base-desktop module";
 
   config = lib.mkIf cfg.enable {
+    programs.nix-index.enable = true;
+
     environment.systemPackages = with pkgs; [
       mpv
       gimp

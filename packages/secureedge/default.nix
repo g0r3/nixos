@@ -43,6 +43,7 @@
   wayland,
   pipewire,
   libpulseaudio,
+  tpm2-openssl,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "secureedge";
@@ -185,6 +186,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/icons"
     cp -r usr/share/icons/* "$out/share/icons/"
 
+    # TPM2 OpenSSL provider
+    ln -s "${tpm2-openssl}/lib/ossl-modules/tpm2.so" "$out/lib/secureedge/tpm2.so"
+
     runHook postInstall
   '';
 
@@ -207,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Barracuda SecureEdge Agent — VPN and ZTNA client";
     homepage = "https://www.barracuda.com/products/network-security/secureedge";
-    license = lib.licenses.free;
+    license = lib.licenses.free; # Mark it as free for convenience
     platforms = [ "x86_64-linux" ];
     mainProgram = "secureedge";
   };

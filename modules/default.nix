@@ -17,6 +17,7 @@
     ./nixbuilder.nix
     ./printer.nix
     ./prusa.nix
+    ./secureedge.nix
     ./shares.nix
     ./steam.nix
     ./vscode.nix

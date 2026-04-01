@@ -66,6 +66,7 @@
     dell-fingerprint.enable = true;
     docker.enable = true;
     barracudavpn.enable = true;
+    secureedge.enable = true;
   };
 
   boot.blacklistedKernelModules = [

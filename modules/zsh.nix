@@ -48,9 +48,9 @@ let
       system=$(uname -s)
       flakepath="$HOME/git/nixos/#$(hostname)"
       if [ "$system" = "Linux" ]; then
-        sudo nixos-rebuild switch --flake $flakepath
+        sudo nixos-rebuild switch --flake $flakepath "$@"
       elif [ "$system" = "Darwin" ]; then
-        darwin-rebuild switch --flake $flakepath
+        darwin-rebuild switch --flake $flakepath "$@"
       fi
     }
     ncf() {
@@ -60,9 +60,9 @@ let
       system=$(uname -s)
       flakepath="$HOME/git/nixos/#$(hostname)"
       if [ "$system" = "Linux" ]; then
-        nixos-rebuild build --flake $flakepath
+        nixos-rebuild build --flake $flakepath "$@"
       elif [ "$system" = "Darwin" ]; then
-        darwin-rebuild build --flake $flakepath
+        darwin-rebuild build --flake $flakepath "$@"
       fi
     }
   '';

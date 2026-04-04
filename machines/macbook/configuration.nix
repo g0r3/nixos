@@ -36,7 +36,7 @@
     # displaylink
   ];
 
-  # Homebrew for appliactions not available/broken on nix-darwin
+  # Homebrew for applications not available/broken on nix-darwin
   nix-homebrew = {
     enable = true;
     enableRosetta = true;
@@ -66,45 +66,60 @@
   };
 
   fonts.packages = with pkgs; [
-    pkgs.nerd-fonts.jetbrains-mono
+    nerd-fonts.jetbrains-mono
   ];
 
   system.defaults = {
-    dock.autohide = true;
-    dock.persistent-apps = [
-      # Apps pinned in dock
-      "${pkgs.wezterm}/Applications/Wezterm.app"
-      "${pkgs.brave}/Applications/Brave Browser.app"
-      "/System/Applications/Mail.app"
-      "/System/Applications/Calendar.app"
-      "/System/Applications/Contacts.app"
-      "/System/Applications/App Store.app"
-      "${pkgs.spotify}/Applications/Spotify.app"
-      "/System/Applications/System Settings.app"
-    ];
-    dock.minimize-to-application = true;
+    NSGlobalDomain = {
+      AppleICUForce24HourTime = true;
+      AppleInterfaceStyle = "Dark";
+      KeyRepeat = 2;
+      "com.apple.swipescrolldirection" = false;
+    };
 
-    finder.FXPreferredViewStyle = "clmv";
+    dock = {
+      autohide = true;
+      minimize-to-application = true;
+      persistent-apps = [
+        "${pkgs.wezterm}/Applications/Wezterm.app"
+        "${pkgs.brave}/Applications/Brave Browser.app"
+        "/System/Applications/Mail.app"
+        "/System/Applications/Calendar.app"
+        "/System/Applications/Contacts.app"
+        "/System/Applications/App Store.app"
+        "${pkgs.spotify}/Applications/Spotify.app"
+        "/System/Applications/System Settings.app"
+      ];
+    };
+
+    finder = {
+      FXPreferredViewStyle = "clmv";
+      NewWindowTarget = "Home";
+      ShowExternalHardDrivesOnDesktop = true;
+      ShowHardDrivesOnDesktop = true;
+      ShowMountedServersOnDesktop = true;
+      _FXSortFoldersFirst = true;
+    };
+
+    controlcenter = {
+      Bluetooth = true;
+      Sound = true;
+    };
+
+    WindowManager = {
+      EnableTiledWindowMargins = true;
+      StandardHideWidgets = true;
+    };
 
     loginwindow.GuestEnabled = false;
-    NSGlobalDomain.AppleICUForce24HourTime = true;
-    NSGlobalDomain.AppleInterfaceStyle = "Dark";
-    NSGlobalDomain.KeyRepeat = 2;
-    NSGlobalDomain."com.apple.swipescrolldirection" = false;
-    controlcenter.Bluetooth = true;
-    controlcenter.Sound = true;
-    WindowManager.EnableTiledWindowMargins = true;
-    WindowManager.StandardHideWidgets = true;
-    finder.NewWindowTarget = "Home";
-    finder.ShowExternalHardDrivesOnDesktop = true;
-    finder.ShowHardDrivesOnDesktop = true;
-    finder.ShowMountedServersOnDesktop = true;
-    finder._FXSortFoldersFirst = true;
+    hitoolbox.AppleFnUsageType = "Do Nothing";
   };
+
   system.startup.chime = false;
-  system.keyboard.enableKeyMapping = true;
-  system.keyboard.swapLeftCtrlAndFn = true;
-  system.defaults.hitoolbox.AppleFnUsageType = "Do Nothing";
+  system.keyboard = {
+    enableKeyMapping = true;
+    swapLeftCtrlAndFn = true;
+  };
 
   system.activationScripts.keyboard.text = ''
     # Install Custom Keyboard Layout

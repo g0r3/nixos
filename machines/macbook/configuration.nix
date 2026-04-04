@@ -76,7 +76,6 @@
       KeyRepeat = 2;
       "com.apple.swipescrolldirection" = false;
     };
-
     dock = {
       autohide = true;
       minimize-to-application = true;
@@ -91,7 +90,6 @@
         "/System/Applications/System Settings.app"
       ];
     };
-
     finder = {
       FXPreferredViewStyle = "clmv";
       NewWindowTarget = "Home";
@@ -100,17 +98,14 @@
       ShowMountedServersOnDesktop = true;
       _FXSortFoldersFirst = true;
     };
-
     controlcenter = {
       Bluetooth = true;
       Sound = true;
     };
-
     WindowManager = {
       EnableTiledWindowMargins = true;
       StandardHideWidgets = true;
     };
-
     loginwindow.GuestEnabled = false;
     hitoolbox.AppleFnUsageType = "Do Nothing";
   };
@@ -118,7 +113,7 @@
   system.startup.chime = false;
   system.keyboard = {
     enableKeyMapping = true;
-    swapLeftCtrlAndFn = true;
+    swapLeftCtrlAndFn = false;
   };
 
   system.activationScripts.keyboard.text = ''

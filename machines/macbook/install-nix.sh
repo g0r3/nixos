@@ -2,6 +2,7 @@
 #
 # install-nix.sh
 # Bootstraps a macOS machine with Nix and nix-darwin from this repository.
+# Run as a normal user (not root). The script will sudo where needed.
 #
 
 set -euo pipefail
@@ -20,9 +21,9 @@ log_error() {
 
 # --- Pre-flight Checks ---
 
-# 1. Check Root Privileges
-if [ "$EUID" -ne 0 ]; then
-    log_error "This script must be run as root (sudo)."
+# 1. Do not run as root — the Nix installer handles sudo internally
+if [ "$EUID" -eq 0 ]; then
+    log_error "Do not run this script as root. It will sudo where needed."
 fi
 
 # 2. Check Repository Context
@@ -37,7 +38,7 @@ if /usr/bin/pgrep oahd >/dev/null 2>&1; then
     log_info "Rosetta 2 is already running."
 else
     log_info "Installing Rosetta 2..."
-    /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+    sudo /usr/sbin/softwareupdate --install-rosetta --agree-to-license
 fi
 
 # --- Step 2: Install Nix Package Manager ---
@@ -45,8 +46,8 @@ if command -v nix >/dev/null 2>&1; then
     log_info "Nix is already installed."
 else
     log_info "Installing Nix (Official Installer)..."
-    rm -f /etc/zshrc.backup-before-nix
-    rm -f /etc/bashrc.bashrc.backup-before-nix
+    sudo rm -f /etc/zshrc.backup-before-nix
+    sudo rm -f /etc/bashrc.backup-before-nix
     curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
 fi
 
@@ -59,10 +60,15 @@ fi
 
 # --- Step 3: Prepare for Nix-Darwin ---
 # nix-darwin wants to manage /etc/zshrc and /etc/bashrc.
-# If they exist as regular files, the activation will fail.
-log_info "Preparing /etc for nix-darwin..."
-rm -f /etc/zshrc
-rm -f /etc/bashrc
+# If they exist as regular files (not symlinks managed by nix-darwin),
+# the activation will fail. Only remove them on first bootstrap.
+if [ -f /etc/zshrc ] && [ ! -L /etc/zshrc ]; then
+    log_info "Preparing /etc for nix-darwin..."
+    sudo rm -f /etc/zshrc
+    sudo rm -f /etc/bashrc
+else
+    log_info "/etc/zshrc is already managed by nix-darwin, skipping."
+fi
 
 # --- Step 4: Bootstrap Nix-Darwin ---
 log_info "Building and switching to flake: .#${FLAKE_Target}"
@@ -75,4 +81,4 @@ nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch 
 # --- Completion ---
 echo ""
 log_info "Bootstrap complete!"
-log_info "Please close and reopen your terminal to ensure all environment variables are loaded."
+log_info "From now on, use 'darwin-rebuild switch --flake .#${FLAKE_Target}' to apply changes."

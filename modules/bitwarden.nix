@@ -38,6 +38,7 @@ in
           serviceConfig = {
             Environment = [
               "PATH=/run/current-system/sw/bin"
+              "GTK_USE_PORTAL=0"
             ];
             ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
             ExecStart = "${pkgs.bitwarden-desktop}/bin/bitwarden";

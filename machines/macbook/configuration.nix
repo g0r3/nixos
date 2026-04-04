@@ -69,7 +69,11 @@
     NSGlobalDomain = {
       AppleICUForce24HourTime = true;
       AppleInterfaceStyle = "Dark";
+      AppleKeyboardUIMode = 2; # full keyboard access
+      AppleMiniaturizeOnDoubleClick = false;
       KeyRepeat = 2;
+      "com.apple.mouse.linear" = true; # linear mouse acceleration
+      "com.apple.scrollwheel.scaling" = "0.3125";
       "com.apple.swipescrolldirection" = false;
     };
     dock = {
@@ -92,7 +96,11 @@
       ShowExternalHardDrivesOnDesktop = true;
       ShowHardDrivesOnDesktop = true;
       ShowMountedServersOnDesktop = true;
+      ShowPathbar = true;
       _FXSortFoldersFirst = true;
+    };
+    trackpad = {
+      Clicking = true; # tap to click
     };
     controlcenter = {
       Bluetooth = true;
@@ -112,6 +120,10 @@
     swapLeftCtrlAndFn = false;
   };
 
+  system.activationScripts.postActivation.text = ''
+    pmset -b lessbright 0  # do NOT dim display on battery (differs from default of 1)
+  '';
+
   system.activationScripts.keyboard.text = ''
     # Install Custom Keyboard Layout
     echo "Installing Custom Keyboard Layout..."
@@ -125,6 +137,41 @@
     };
     "com.apple.WindowManager" = {
       "EnableStandardClickToShowDesktop" = 0;
+    };
+    "com.apple.controlstrip" = {
+      MiniCustomized = [
+        "com.apple.system.brightness"
+        "com.apple.system.volume"
+        "com.apple.system.mute"
+        "com.apple.system.launchpad"
+      ];
+    };
+    "com.apple.touchbar.agent" = {
+      PresentationModeGlobal = "app";
+      PresentationModeFnModes = {
+        appWithControlStrip = "functionKeys";
+      };
+      PresentationModePerApp = {
+        "com.github.wez.wezterm" = "functionKeys";
+      };
+    };
+    "com.apple.assistant.support" = {
+      "Assistant Enabled" = false; # disable Siri
+    };
+    "com.apple.finder" = {
+      ShowRecentTags = false;
+    };
+    "com.apple.dock" = {
+      showDesktopGestureEnabled = false;
+    };
+    "com.apple.AppleMultitouchTrackpad" = {
+      TrackpadMomentumScroll = false;
+    };
+    "com.apple.TextInputMenu" = {
+      visible = false; # hide text input menu bar icon
+    };
+    "com.apple.menuextra.clock" = {
+      ShowDate = 0; # hide date in menu bar clock
     };
     "com.apple.HIToolbox" = {
       # The currently selected layout

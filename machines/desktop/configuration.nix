@@ -65,6 +65,8 @@
     prusa.enable = true;
     neovim.enable = true;
     kicad.enable = true;
+    git.userName = "g0r3";
+    git.userEmail = "3685646+g0r3@users.noreply.github.com";
   };
 
   services.locate = {

@@ -10,6 +10,7 @@
     ./displaylink.nix
     ./docker.nix
     ./ferdium.nix
+    ./git.nix
     ./kde.nix
     ./kicad.nix
     ./maintenance.nix

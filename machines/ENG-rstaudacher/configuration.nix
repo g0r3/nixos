@@ -68,6 +68,8 @@
     docker.enable = true;
     barracudavpn.enable = true;
     secureedge.enable = true;
+    git.userName = "rstaudacher";
+    git.userEmail = "rstaudacher@barracuda.com";
   };
 
   boot.blacklistedKernelModules = [

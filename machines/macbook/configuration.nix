@@ -28,11 +28,7 @@
 
   environment.systemPackages = with pkgs; [
     mkalias # Needed for adding applications to Apple Spotlight
-    brave
-    spotify
     mas
-    stow
-    gemini-cli-bin
     # displaylink
   ];
 
@@ -155,6 +151,7 @@
   };
 
   modules = {
+    base-desktop.enable = true;
     zsh.enable = true;
     printer.enable = true;
     bitwarden.enable = true;

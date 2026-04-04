@@ -92,7 +92,6 @@
   environment.systemPackages = with pkgs; [
     pavucontrol
     zoom-us
-    claude-code
     slack
     freerdp
     realvnc-vnc-viewer
@@ -103,12 +102,8 @@
       color=#505050
     '')
     alsa-utils
-    stow
     clang
-    gemini-cli-bin
-    nurl # generates Nix fetcher calls
     python314
-    ipcalc
   ];
 
   services.locate = {

@@ -70,10 +70,7 @@
       AppleICUForce24HourTime = true;
       AppleInterfaceStyle = "Dark";
       AppleKeyboardUIMode = 2; # full keyboard access
-      AppleMiniaturizeOnDoubleClick = false;
       KeyRepeat = 2;
-      "com.apple.mouse.linear" = true; # linear mouse acceleration
-      "com.apple.scrollwheel.scaling" = "0.3125";
       "com.apple.swipescrolldirection" = false;
     };
     dock = {
@@ -173,6 +170,11 @@
     "com.apple.menuextra.clock" = {
       ShowDate = 0; # hide date in menu bar clock
     };
+    NSGlobalDomain = {
+      AppleMiniaturizeOnDoubleClick = false;
+      "com.apple.mouse.linear" = true; # linear mouse acceleration
+      "com.apple.scrollwheel.scaling" = "0.3125";
+    };
     "com.apple.HIToolbox" = {
       # The currently selected layout
       AppleCurrentKeyboardLayoutInputSourceID = "org.unknown.keylayout.USwithgermanUmlauts";
@@ -201,12 +203,19 @@
     base-desktop.enable = true;
     zsh.enable = true;
     printer.enable = true;
-    bitwarden.enable = true;
-    bitwarden.sshAgent.enable = true;
+    bitwarden = {
+      enable = true;
+      sshAgent.enable = true;
+    };
     ferdium.enable = true;
     prusa.enable = true;
     neovim.enable = true;
     kicad.enable = true;
+    git = {
+      enable = true;
+      userName = "g0r3";
+      userEmail = "3685646+g0r3@users.noreply.github.com";
+    };
   };
 
   # This script is needed to add all Application to the Spotlight Search

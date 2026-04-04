@@ -59,14 +59,19 @@
     maintenance.enable = true;
     arduino.enable = true;
     wireplumber.enable = true;
-    bitwarden.enable = true;
-    bitwarden.sshAgent.enable = true;
+    bitwarden = {
+      enable = true;
+      sshAgent.enable = true;
+    };
     ferdium.enable = true;
     prusa.enable = true;
     neovim.enable = true;
     kicad.enable = true;
-    git.userName = "g0r3";
-    git.userEmail = "3685646+g0r3@users.noreply.github.com";
+    git = {
+      enable = true;
+      userName = "g0r3";
+      userEmail = "3685646+g0r3@users.noreply.github.com";
+    };
   };
 
   services.locate = {

@@ -4,26 +4,31 @@
   ...
 }:
 
+with lib;
+
 let
   cfg = config.modules.git;
 in
 {
   options.modules.git = {
-    userName = lib.mkOption {
-      type = lib.types.str;
+    enable = mkEnableOption "Enable Git configuration";
+    userName = mkOption {
+      type = types.str;
       description = "Git user name";
     };
-    userEmail = lib.mkOption {
-      type = lib.types.str;
+    userEmail = mkOption {
+      type = types.str;
       description = "Git user email";
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     environment.etc."gitconfig".text = ''
       [user]
         name = ${cfg.userName}
         email = ${cfg.userEmail}
+      [pull]
+        rebase = false
     '';
   };
 }

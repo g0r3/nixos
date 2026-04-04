@@ -76,7 +76,7 @@ log_info "Building and switching to flake: .#${FLAKE_Target}"
 # Ensure we are in the repo root for the flake command
 cd "${REPO_ROOT}"
 
-nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ".#${FLAKE_Target}"
+sudo nix run nix-darwin --extra-experimental-features "nix-command flakes" -- switch --flake ".#${FLAKE_Target}"
 
 # --- Completion ---
 echo ""

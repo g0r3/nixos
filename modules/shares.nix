@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  isLinux,
   ...
 }:
 let
@@ -9,7 +10,7 @@ in
 {
   options.modules.shares.enable = lib.mkEnableOption "Whether to enable the shares module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     fileSystems."/mnt/files" = {
       device = "nas.staudacher.dev:/files";
       fsType = "nfs";
@@ -57,5 +58,5 @@ in
         "soft"
       ];
     };
-  };
+  });
 }

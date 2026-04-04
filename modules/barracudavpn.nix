@@ -2,8 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
-  isDarwin,
+  isLinux,
   ...
 }:
 
@@ -21,29 +20,33 @@ in
 {
   options.modules.barracudavpn.enable = lib.mkEnableOption "Whether to enable the Barracudavpn module";
 
-  config = lib.mkIf cfg.enable ({
-    nixpkgs.overlays = [
-      (final: prev: {
-        barracudavpn = final.callPackage ../packages/barracudavpn/default.nix { };
-      })
-    ];
-    environment.systemPackages = [ pkgs.barracudavpn ];
-    environment.interactiveShellInit = interactiveShellInit;
-    environment.etc."barracudavpn/barracudavpn.conf".source =
-      "${pkgs.barracudavpn}/config/barracudavpn.conf";
-    systemd.tmpfiles.rules = [
-      "d /etc/barracudavpn/ca 0755 root root -"
-    ];
-    security.sudo.extraRules = [
-      {
-        users = [ "rstaudacher" ];
-        commands = [
-          {
-            command = "${pkgs.barracudavpn}/bin/barracudavpn";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-      }
-    ];
-  });
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    (lib.optionalAttrs isLinux {
+      systemd.tmpfiles.rules = [
+        "d /etc/barracudavpn/ca 0755 root root -"
+      ];
+      security.sudo.extraRules = [
+        {
+          users = [ "rstaudacher" ];
+          commands = [
+            {
+              command = "${pkgs.barracudavpn}/bin/barracudavpn";
+              options = [ "NOPASSWD" ];
+            }
+          ];
+        }
+      ];
+    })
+    {
+      nixpkgs.overlays = [
+        (final: prev: {
+          barracudavpn = final.callPackage ../packages/barracudavpn/default.nix { };
+        })
+      ];
+      environment.systemPackages = [ pkgs.barracudavpn ];
+      environment.interactiveShellInit = interactiveShellInit;
+      environment.etc."barracudavpn/barracudavpn.conf".source =
+        "${pkgs.barracudavpn}/config/barracudavpn.conf";
+    }
+  ]);
 }

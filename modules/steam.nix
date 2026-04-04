@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  isLinux,
   ...
 }:
 let
@@ -10,7 +11,7 @@ in
 {
   options.modules.steam.enable = lib.mkEnableOption "Whether to enable the Steam module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     programs = {
       gamemode.enable = true;
       gamescope = {
@@ -38,5 +39,5 @@ in
         RestartSec = "5s";
       };
     };
-  };
+  });
 }

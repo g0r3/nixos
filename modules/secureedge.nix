@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  isLinux,
   ...
 }:
 
@@ -11,7 +12,7 @@ in
 {
   options.modules.secureedge.enable = lib.mkEnableOption "Whether to enable the Barracuda SecureEdge Agent";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
         secureedge = final.callPackage ../packages/secureedge/default.nix { };
@@ -55,5 +56,5 @@ in
         RestartSec = 5;
       };
     };
-  };
+  });
 }

@@ -21,6 +21,11 @@
         nixpkgs.config.allowUnfree = true;
         # nixpkgs.config.allowUnsupportedSystem = true;
         # nixpkgs.config.allowBroken = true;
+        nixpkgs.overlays = [
+          (final: prev: {
+            claude-code = final.callPackage ./packages/claude-code { };
+          })
+        ];
         nix.settings.experimental-features = [
           "nix-command"
           "flakes"
@@ -32,7 +37,7 @@
         nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs;
-            isNixos = true;
+            isLinux = true;
             isDarwin = false;
           };
           modules = [
@@ -46,7 +51,7 @@
         nix-darwin.lib.darwinSystem {
           specialArgs = {
             inherit inputs;
-            isNixos = false;
+            isLinux = false;
             isDarwin = true;
           };
           modules = [

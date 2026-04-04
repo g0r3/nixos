@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  isLinux,
   ...
 }:
 let
@@ -11,7 +12,7 @@ in
 {
   options.modules.base-desktop.enable = lib.mkEnableOption "Whether to enable the base-desktop module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     programs.nix-index.enable = true;
 
     environment.systemPackages = with pkgs; [
@@ -20,11 +21,12 @@ in
       geary
       brave
       spotify
+      thunderbird
       sublime3
       obsidian
       libreoffice-qt-still
       gnome-disk-utility
       system-config-printer
     ];
-  };
+  });
 }

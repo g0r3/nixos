@@ -2,7 +2,7 @@
   config,
   pkgs,
   lib,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -78,7 +78,7 @@ in
         source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
       '';
     })
-    (lib.optionalAttrs isNixos {
+    (lib.optionalAttrs isLinux {
       system.userActivationScripts.zshrc = "touch .zshrc";
 
       programs.zsh = {

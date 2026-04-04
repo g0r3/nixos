@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  isLinux,
   ...
 }:
 let
@@ -9,7 +10,7 @@ in
 {
   options.modules.wireplumber.enable = lib.mkEnableOption "Whether to enable the wireplumber module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     services.pipewire.wireplumber.extraConfig = {
       "51-disable-suspension" = {
         "monitor.alsa.rules" = [
@@ -50,5 +51,5 @@ in
         };
       };
     };
-  };
+  });
 }

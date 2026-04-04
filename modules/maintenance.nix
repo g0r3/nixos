@@ -1,7 +1,9 @@
 {
   config,
   lib,
+  pkgs,
   inputs,
+  isLinux,
   ...
 }:
 let
@@ -10,7 +12,7 @@ in
 {
   options.modules.maintenance.enable = lib.mkEnableOption "Whether to enable the maintenance module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     system.autoUpgrade = {
       enable = true;
       flake = inputs.self.outPath;
@@ -32,5 +34,5 @@ in
       interval = "weekly";
       fileSystems = [ "/" ];
     };
-  };
+  });
 }

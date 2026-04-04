@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  isLinux,
   ...
 }:
 let
@@ -10,7 +11,7 @@ in
 {
   options.modules.kde.enable = lib.mkEnableOption "Whether to enable the KDE module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     nixpkgs.overlays = [
       (final: prev: {
         shutdown-or-switch = final.callPackage ../packages/shutdown-or-switch/package.nix { };
@@ -84,5 +85,5 @@ in
       whitesur-gtk-theme
       (whitesur-icon-theme.override { alternativeIcons = true; })
     ];
-  };
+  });
 }

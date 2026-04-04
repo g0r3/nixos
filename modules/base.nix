@@ -3,8 +3,7 @@
   config,
   pkgs,
   lib,
-  isNixos,
-  isDarwin,
+  isLinux,
   ...
 }:
 let
@@ -13,37 +12,40 @@ in
 {
   options.modules.base.enable = lib.mkEnableOption "Whether to enable the base module";
 
-  config = lib.mkIf cfg.enable {
-    services.fwupd.enable = lib.mkIf isNixos true;
-
-    environment.systemPackages =
-      with pkgs;
-      [
-        # Cross-platform packages
-        wget
-        jq
-        gnumake
-        screen
-        dig
-        git
-        git-lfs
-        unzip
-        zsh
-        openssl
-        nurl
-        nmap
-        file
-        tree
-        python314
-      ]
-      ++ lib.optionals isNixos [
-        # Linux-only tools
-        mlocate
-        ethtool
-        hdparm
-        dmidecode
-        pciutils
-        usbutils
-      ];
-  };
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    (lib.optionalAttrs isLinux {
+      services.fwupd.enable = true;
+    })
+    {
+      environment.systemPackages =
+        with pkgs;
+        [
+          # Cross-platform packages
+          wget
+          jq
+          gnumake
+          screen
+          dig
+          git
+          git-lfs
+          unzip
+          zsh
+          openssl
+          nurl
+          nmap
+          file
+          tree
+          python314
+        ]
+        ++ lib.optionals isLinux [
+          # Linux-only tools
+          mlocate
+          ethtool
+          hdparm
+          dmidecode
+          pciutils
+          usbutils
+        ];
+    }
+  ]);
 }

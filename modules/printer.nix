@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -28,7 +28,7 @@ in
   options.modules.printer.enable = lib.mkEnableOption "Whether to enable the printer module";
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
-    (lib.optionalAttrs isNixos {
+    (lib.optionalAttrs isLinux {
       services.printing = {
         enable = true;
         package = cups-patched;

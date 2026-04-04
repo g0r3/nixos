@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -20,7 +20,7 @@ in
   };
 
   config = lib.mkMerge [
-    (lib.optionalAttrs isNixos {
+    (lib.optionalAttrs isLinux {
       # Nix-specific
       environment.systemPackages = with pkgs; [
         prusa-slicer

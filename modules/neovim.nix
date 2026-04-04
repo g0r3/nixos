@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -25,7 +25,7 @@ in
         };
       })
       # --- Linux / Systemd Configuration ---
-      (lib.optionalAttrs isNixos {
+      (lib.optionalAttrs isLinux {
         programs.nix-ld.enable = true; # Make the plugins compatible with nixos paths
 
         environment.systemPackages = [ pkgs.wl-clipboard ];

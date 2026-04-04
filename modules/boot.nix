@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  isLinux,
   ...
 }:
 let
@@ -10,7 +11,7 @@ in
 {
   options.modules.boot.enable = lib.mkEnableOption "Whether to enable the boot module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     boot.loader.efi.efiSysMountPoint = "/boot";
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
@@ -23,5 +24,5 @@ in
     ];
     boot.kernelPackages = pkgs.linuxPackages_zen;
     boot.kernelModules = [ ];
-  };
+  });
 }

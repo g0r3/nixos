@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -30,7 +30,7 @@ in
           printf "Bitwarden added to login items.\n"
         '';
       })
-      (lib.optionalAttrs isNixos {
+      (lib.optionalAttrs isLinux {
         systemd.user.services.bitwarden = {
           description = "Start Bitwarden after graphical login";
           wantedBy = [ "graphical-session.target" ];

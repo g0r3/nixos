@@ -3,7 +3,7 @@
   pkgs,
   lib,
   inputs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -74,7 +74,7 @@ in
       })
 
       # --- Linux / Systemd Configuration ---
-      (lib.optionalAttrs isNixos {
+      (lib.optionalAttrs isLinux {
         environment.systemPackages = with pkgs; [
           kicad
         ];

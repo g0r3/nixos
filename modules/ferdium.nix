@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -32,7 +32,7 @@ in
         '';
       })
       # --- Linux / Systemd Configuration ---
-      (lib.optionalAttrs isNixos {
+      (lib.optionalAttrs isLinux {
         environment.systemPackages = [ pkgs.ferdium ];
         systemd.user.services.ferdium = {
           description = "Start Ferdium after graphical login";

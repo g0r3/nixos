@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -22,7 +22,7 @@ in
           printf "Bitwarden added to login items.\n"
         '';
       })
-      (lib.optionalAttrs isNixos {
+      (lib.optionalAttrs isLinux {
         virtualisation.docker.enable = true;
         users.users.rstaudacher.extraGroups = [ "docker" ];
       })

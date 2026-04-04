@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  isLinux,
   ...
 }:
 let
@@ -13,7 +14,7 @@ in
 {
   options.modules.dell-fingerprint.enable = lib.mkEnableOption "Whether to enable the dell-fingerprint module";
 
-  config = lib.mkIf cfg.enable {
+  config = lib.optionalAttrs isLinux (lib.mkIf cfg.enable {
     services.fprintd = {
       enable = true;
       package = pkgs.fprintd-tod;
@@ -33,5 +34,5 @@ in
         "${libfprint-2-tod1-broadcom-cv3plus}${libfprint-2-tod1-broadcom-cv3plus.passthru.firmwarePath}:/var/lib/fprint/.broadcomCv3plusFW"
       ];
     };
-  };
+  });
 }

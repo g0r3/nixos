@@ -2,7 +2,7 @@
   config,
   pkgs,
   lib,
-  isNixos,
+  isLinux,
   isDarwin,
   ...
 }:
@@ -18,7 +18,7 @@ in
       (lib.optionalAttrs isDarwin {
         # --- macOS / Darwin Configuration ---
       })
-      (lib.optionalAttrs isNixos {
+      (lib.optionalAttrs isLinux {
         # --- Linux / Systemd Configuration ---
         environment.systemPackages = [ pkgs.displaylink ];
 

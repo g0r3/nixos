@@ -155,6 +155,7 @@
     zsh.enable = true;
     printer.enable = true;
     bitwarden.enable = true;
+    bitwarden.sshAgent.enable = true;
     ferdium.enable = true;
     prusa.enable = true;
     neovim.enable = true;

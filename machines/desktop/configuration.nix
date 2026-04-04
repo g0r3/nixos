@@ -60,7 +60,7 @@
     arduino.enable = true;
     wireplumber.enable = true;
     bitwarden.enable = true;
-    bitwarden.sshAgentSocket = "$HOME/.bitwarden-ssh-agent.sock";
+    bitwarden.sshAgent.enable = true;
     ferdium.enable = true;
     prusa.enable = true;
     neovim.enable = true;

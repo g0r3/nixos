@@ -61,6 +61,7 @@
     vscode.enable = true;
     nixbuilder.enable = true;
     bitwarden.enable = true;
+    bitwarden.sshAgent.enable = true;
     neovim.enable = true;
     displaylink.enable = true;
     dell-fingerprint.enable = true;

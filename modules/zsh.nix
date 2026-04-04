@@ -100,9 +100,24 @@ in
 
         programs.zsh = {
           enable = true;
-          enableCompletion = false;
+          enableCompletion = true;
           histSize = 10000;
           histFile = "$HOME/.zsh_history";
+          interactiveShellInit = ''
+            eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/config.omp.json)"
+
+            zstyle ':completion:*' completer _expand _complete _ignored _approximate
+
+            WORDCHARS=''${WORDCHARS/\/}
+            bindkey -e
+
+            # Keybindings
+            bindkey "^[[1;5C" forward-word
+            bindkey "^[[1;5D" backward-word
+            bindkey "^[[3~" delete-char
+            bindkey '^[[Z' reverse-menu-complete
+            bindkey '^B' autosuggest-toggle
+          '';
         };
 
         environment.systemPackages = with pkgs; [

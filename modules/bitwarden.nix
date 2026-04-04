@@ -45,9 +45,14 @@ in
       {
         environment.systemPackages = [ pkgs.bitwarden-desktop ];
       }
-      (lib.mkIf cfg.sshAgent.enable {
+      (lib.mkIf (cfg.sshAgent.enable && isLinux) {
         programs.zsh.shellInit = ''
           export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
+        '';
+      })
+      (lib.mkIf (cfg.sshAgent.enable && isDarwin) {
+        programs.zsh.shellInit = ''
+          export SSH_AUTH_SOCK="$HOME/Library/Containers/com.bitwarden.desktop/Data/bitwarden-ssh-agent.sock"
         '';
       })
     ]

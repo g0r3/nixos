@@ -84,6 +84,8 @@
         "/System/Applications/Contacts.app"
         "/System/Applications/App Store.app"
         "${pkgs.spotify}/Applications/Spotify.app"
+        "/Applications/KiCad/KiCad.app"
+        "/Applications/FreeCAD.app"
         "/System/Applications/System Settings.app"
       ];
     };

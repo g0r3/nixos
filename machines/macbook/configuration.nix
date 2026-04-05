@@ -93,6 +93,7 @@
       ShowExternalHardDrivesOnDesktop = true;
       ShowHardDrivesOnDesktop = true;
       ShowMountedServersOnDesktop = true;
+      AppleShowAllExtensions = true;
       ShowPathbar = true;
       _FXSortFoldersFirst = true;
     };
@@ -119,6 +120,16 @@
 
   system.activationScripts.postActivation.text = ''
     pmset -b lessbright 0  # do NOT dim display on battery (differs from default of 1)
+
+    # Set Finder sidebar favorites
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides remove all 2>/dev/null || true
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Applications file:///Applications/
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Desktop file:///Users/reinhard/Desktop/
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Documents file:///Users/reinhard/Documents/
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Downloads file:///Users/reinhard/Downloads/
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Movies file:///Users/reinhard/Movies/
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Music file:///Users/reinhard/Music/
+    sudo -u reinhard ${pkgs.mysides}/bin/mysides add Pictures file:///Users/reinhard/Pictures/
   '';
 
   system.activationScripts.keyboard.text = ''
@@ -156,7 +167,14 @@
       "Assistant Enabled" = false; # disable Siri
     };
     "com.apple.finder" = {
-      ShowRecentTags = false;
+      ShowRecentTags = true;
+    };
+    "com.apple.sidebarlists" = {
+      networkbrowser = {
+        CustomListProperties = {
+          "com.apple.NetworkBrowser.bonjourEnabled" = false;
+        };
+      };
     };
     "com.apple.dock" = {
       showDesktopGestureEnabled = false;

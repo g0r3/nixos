@@ -24,7 +24,7 @@
   # The primary user of the package
   system.primaryUser = "reinhard";
 
-  networking.hostName = "macbook-pro";
+  networking.hostName = "mbp";
 
   environment.systemPackages = with pkgs; [
     mkalias # Needed for adding applications to Apple Spotlight
@@ -229,6 +229,7 @@
     };
     ferdium.enable = true;
     prusa.enable = true;
+    steam.enable = true;
     neovim.enable = true;
     kicad.enable = true;
     git = {

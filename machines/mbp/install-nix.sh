@@ -9,7 +9,7 @@ set -euo pipefail
 
 # --- Constants & Configuration ---
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-FLAKE_Target="macbook-pro"
+FLAKE_Target="mbp"
 
 # --- Logging Functions ---
 log_info() { echo -e "\033[1;34m[INFO]\033[0m $*"; }

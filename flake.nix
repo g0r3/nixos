@@ -19,8 +19,6 @@
     let
       sharedConfig = {
         nixpkgs.config.allowUnfree = true;
-        # nixpkgs.config.allowUnsupportedSystem = true;
-        # nixpkgs.config.allowBroken = true;
         nixpkgs.overlays = [
           (final: prev: {
             claude-code = final.callPackage ./packages/claude-code { };
@@ -67,7 +65,7 @@
         # arr = mkNixSystem ./machines/homelab/arr/configuration.nix;
       };
       darwinConfigurations = {
-        macbook-pro = mkDarwinSystem ./machines/macbook/configuration.nix;
+        mbp = mkDarwinSystem ./machines/mbp/configuration.nix;
       };
     };
 }

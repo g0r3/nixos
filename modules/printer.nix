@@ -76,14 +76,21 @@ in
       system.activationScripts.printer.text = ''
         if ! /usr/bin/lpstat -p ${printerName} 2>/dev/null; then
           echo "Adding ${printerDescription} printer..." >&2
-          /usr/sbin/lpadmin -p ${printerName} \
-            -v "${printerUri}" \
-            -m everywhere \
-            -L "${printerLocation}" \
-            -D "${printerDescription}" \
-            -o PageSize=${pageSize} \
-            -E
-          /usr/sbin/lpadmin -d ${printerName}
+          for i in 1 2 3 4 5; do
+            if /usr/sbin/lpadmin -p ${printerName} \
+              -v "${printerUri}" \
+              -m everywhere \
+              -L "${printerLocation}" \
+              -D "${printerDescription}" \
+              -o PageSize=${pageSize} \
+              -E 2>/dev/null; then
+              /usr/sbin/lpadmin -d ${printerName}
+              echo "Printer ${printerDescription} added successfully." >&2
+              break
+            fi
+            echo "Printer unreachable, retrying in 5s ($i/5)..." >&2
+            sleep 5
+          done
         fi
       '';
     })

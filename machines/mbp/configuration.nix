@@ -112,7 +112,7 @@
       };
       CustomUserPreferences = {
         NSGlobalDomain = {
-          AppleMiniaturizeOnDoubleClick = false;
+          AppleActionOnDoubleClick = "None";
           "com.apple.mouse.linear" = true; # linear mouse acceleration
           "com.apple.scrollwheel.scaling" = "0.3125";
         };

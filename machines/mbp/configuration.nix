@@ -68,6 +68,7 @@
     neovim.enable = true;
     printer.enable = true;
     prusa.enable = true;
+    shares.enable = true;
     steam.enable = true;
     zsh.enable = true;
   };

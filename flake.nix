@@ -6,6 +6,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -14,6 +16,7 @@
       nixpkgs,
       nix-darwin,
       nix-homebrew,
+      nix-index-database,
       ...
     }@inputs:
     let
@@ -41,6 +44,7 @@
           modules = [
             machine
             sharedConfig
+            nix-index-database.nixosModules.nix-index
           ];
         };
 
@@ -55,6 +59,7 @@
           modules = [
             machine
             sharedConfig
+            nix-index-database.darwinModules.nix-index
           ];
         };
     in

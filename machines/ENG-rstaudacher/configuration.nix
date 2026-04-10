@@ -80,6 +80,9 @@
     "intel_ipu6"
     "intel_ipu6_isys"
     "intel_ipu6_psys"
+    # disable unused watchdog modules (noisy "did not stop" message on shutdown)
+    "iTCO_wdt"
+    "mei_wdt"
   ];
 
   nixpkgs.config.permittedInsecurePackages = [

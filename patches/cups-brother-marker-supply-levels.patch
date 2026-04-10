@@ -1,9 +1,22 @@
+diff --git a/backend/backend-private.h b/backend/backend-private.h
+index 72b454a..c7565bd 100644
+--- a/backend/backend-private.h
++++ b/backend/backend-private.h
+@@ -326,6 +326,8 @@ extern ssize_t		backendRunLoop(int print_fd, int device_fd, int snmp_fd,
+ extern int		backendSNMPSupplies(int snmp_fd, http_addr_t *addr,
+ 			                    int *page_count,
+ 					    int *printer_state);
++extern int		backendSNMPSupplyCount(void);
++extern const char	*backendSNMPCachedLevels(void);
+ extern int		backendWaitLoop(int snmp_fd, http_addr_t *addr,
+ 			                int use_bc, _cups_sccb_t side_cb);
+ 
 diff --git a/backend/ipp.c b/backend/ipp.c
-index 08a41efef..143e71008 100644
+index 08a41ef..35fa3a7 100644
 --- a/backend/ipp.c
 +++ b/backend/ipp.c
-@@ -3170,7 +3170,9 @@ report_attr(ipp_attribute_t *attr)	/* I - Attribute */
-
+@@ -3170,6 +3170,8 @@ report_attr(ipp_attribute_t *attr)	/* I - Attribute */
+ 
        case IPP_TAG_TEXT :
        case IPP_TAG_NAME :
 +      case IPP_TAG_TEXTLANG :
@@ -11,16 +24,173 @@ index 08a41efef..143e71008 100644
        case IPP_TAG_KEYWORD :
            quote_string(attr->values[i].string.text, valptr, (size_t)(value + sizeof(value) - valptr));
            valptr += strlen(valptr);
-           break;
-diff --git a/cups/ppd-cache.c b/cups/ppd-cache.c
-index f5386532c..5949054c1 100644
---- a/cups/ppd-cache.c
-+++ b/cups/ppd-cache.c
-@@ -3402,6 +3402,7 @@ _ppdCreateFromIPP2(
-   cupsFilePrintf(fp, "*APAirPrint: True\n");
- #endif // __APPLE__
-   cupsFilePuts(fp, "*cupsSNMPSupplies: False\n");
-+  cupsFilePuts(fp, "*cupsIPPSupplies: True\n");
-   cupsFilePrintf(fp, "*cupsLanguages: \"%s", lang->language);
-   if ((lang_supp = ippFindAttribute(supported, "printer-strings-languages-supported", IPP_TAG_LANGUAGE)) != NULL)
+@@ -3316,25 +3318,90 @@ report_printer_state(ipp_t *ipp)	/* I - IPP response */
+ 
+   if (ipp_supplies > 0)
    {
+-    if ((marker = ippFindAttribute(ipp, "marker-colors", IPP_TAG_NAME)) != NULL)
+-      report_attr(marker);
+-    if ((marker = ippFindAttribute(ipp, "marker-high-levels",
+-                                   IPP_TAG_INTEGER)) != NULL)
+-      report_attr(marker);
+-    if ((marker = ippFindAttribute(ipp, "marker-levels",
+-                                   IPP_TAG_INTEGER)) != NULL)
+-      report_attr(marker);
+-    if ((marker = ippFindAttribute(ipp, "marker-low-levels",
+-                                   IPP_TAG_INTEGER)) != NULL)
+-      report_attr(marker);
+-    if ((marker = ippFindAttribute(ipp, "marker-message",
+-                                   IPP_TAG_TEXT)) != NULL)
+-      report_attr(marker);
+-    if ((marker = ippFindAttribute(ipp, "marker-names", IPP_TAG_NAME)) != NULL)
+-      report_attr(marker);
+-    if ((marker = ippFindAttribute(ipp, "marker-types",
+-                                   IPP_TAG_KEYWORD)) != NULL)
+-      report_attr(marker);
++    int		snmp_count;		/* SNMP supply count */
++    int		ipp_count;		/* IPP supply count */
++    const char	*snmp_levels;		/* Cached SNMP levels string */
++
++    snmp_count  = backendSNMPSupplyCount();
++    marker      = ippFindAttribute(ipp, "marker-levels", IPP_TAG_INTEGER);
++    ipp_count   = marker ? ippGetCount(marker) : 0;
++    snmp_levels = backendSNMPCachedLevels();
++
++    if (snmp_count > 0 && ipp_count > 0 && snmp_count > ipp_count &&
++        snmp_levels != NULL)
++    {
++     /*
++      * SNMP reported more supplies than IPP (e.g. drums, belt, waste toner).
++      * Merge: keep SNMP's complete supply list but update the first ipp_count
++      * levels with IPP's more precise percentages (SNMP often reports -3
++      * "some remaining" for toners, mapped to 50%).
++      */
++
++      int	snmp_vals[32];		/* Parsed SNMP levels */
++      int	j;			/* Looping var */
++      const char *sptr;			/* Pointer into SNMP levels string */
++      char	merged[32 * 4];		/* Merged levels string */
++      char	*mptr;			/* Pointer into merged string */
++
++      for (j = 0, sptr = snmp_levels; j < snmp_count && *sptr; j ++)
++      {
++        snmp_vals[j] = strtol(sptr, NULL, 10);
++        while (*sptr && *sptr != ',')
++          sptr ++;
++        if (*sptr == ',')
++          sptr ++;
++      }
++
++      for (j = 0; j < ipp_count && j < snmp_count; j ++)
++        snmp_vals[j] = ippGetInteger(marker, j);
++
++      for (j = 0, mptr = merged; j < snmp_count; j ++, mptr += strlen(mptr))
++      {
++        if (j)
++          *mptr++ = ',';
++        snprintf(mptr, sizeof(merged) - (size_t)(mptr - merged), "%d",
++                 snmp_vals[j]);
++      }
++
++      _cupsMutexLock(&report_mutex);
++      num_attr_cache = cupsAddOption("marker-levels", merged, num_attr_cache,
++                                     &attr_cache);
++      fprintf(stderr, "ATTR: marker-levels=%s\n", merged);
++      _cupsMutexUnlock(&report_mutex);
++
++     /*
++      * Skip marker-names, marker-types, marker-colors — keep SNMP's complete
++      * list which was already emitted by backendSNMPSupplies().
++      */
++
++      if ((marker = ippFindAttribute(ipp, "marker-message",
++                                     IPP_TAG_TEXT)) != NULL)
++        report_attr(marker);
++    }
++    else
++    {
++      if ((marker = ippFindAttribute(ipp, "marker-colors",
++                                     IPP_TAG_NAME)) != NULL)
++        report_attr(marker);
++      if ((marker = ippFindAttribute(ipp, "marker-high-levels",
++                                     IPP_TAG_INTEGER)) != NULL)
++        report_attr(marker);
++      if ((marker = ippFindAttribute(ipp, "marker-levels",
++                                     IPP_TAG_INTEGER)) != NULL)
++        report_attr(marker);
++      if ((marker = ippFindAttribute(ipp, "marker-low-levels",
++                                     IPP_TAG_INTEGER)) != NULL)
++        report_attr(marker);
++      if ((marker = ippFindAttribute(ipp, "marker-message",
++                                     IPP_TAG_TEXT)) != NULL)
++        report_attr(marker);
++      if ((marker = ippFindAttribute(ipp, "marker-names",
++                                     IPP_TAG_NAME)) != NULL)
++        report_attr(marker);
++      if ((marker = ippFindAttribute(ipp, "marker-types",
++                                     IPP_TAG_KEYWORD)) != NULL)
++        report_attr(marker);
++    }
+   }
+ }
+ 
+diff --git a/backend/snmp-supplies.c b/backend/snmp-supplies.c
+index 41bee50..d4390e1 100644
+--- a/backend/snmp-supplies.c
++++ b/backend/snmp-supplies.c
+@@ -79,6 +79,10 @@ static backend_supplies_t supplies[CUPS_MAX_SUPPLIES];
+ 					/* Supply information */
+ static int		supply_state = -1;
+ 					/* Supply state info */
++static char		snmp_cached_levels[CUPS_MAX_SUPPLIES * 4] = "";
++					/* Cached SNMP marker-levels string */
++static int		snmp_cached_count = 0;
++					/* Number of cached SNMP supplies */
+ 
+ static const int	hrDeviceDescr[] =
+ 			{ CUPS_OID_hrDeviceDescr, 1, -1 };
+@@ -326,6 +330,9 @@ backendSNMPSupplies(
+ 
+     fprintf(stderr, "ATTR: marker-levels=%s\n", value);
+ 
++    snmp_cached_count = num_supplies;
++    strlcpy(snmp_cached_levels, value, sizeof(snmp_cached_levels));
++
+     if (supply_state < 0)
+       change_state = 0xffff;
+     else
+@@ -1036,6 +1043,34 @@ backend_walk_cb(cups_snmp_t *packet,	/* I - SNMP packet */
+ }
+ 
+ 
++/*
++ * 'backendSNMPSupplyCount()' - Return the number of SNMP-reported supplies.
++ */
++
++int					/* O - Number of supplies, or 0 */
++backendSNMPSupplyCount(void)
++{
++  return (snmp_cached_count);
++}
++
++
++/*
++ * 'backendSNMPCachedLevels()' - Return the cached SNMP marker-levels string.
++ *
++ * Returns the comma-separated levels string from the last SNMP supply query,
++ * or NULL if no SNMP supplies have been reported.
++ */
++
++const char *				/* O - Levels string or NULL */
++backendSNMPCachedLevels(void)
++{
++  if (snmp_cached_levels[0])
++    return (snmp_cached_levels);
++  else
++    return (NULL);
++}
++
++
+ /*
+  * 'utf16_to_utf8()' - Convert UTF-16 text to UTF-8.
+  */

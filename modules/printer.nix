@@ -17,7 +17,8 @@ let
   pageSize = "A4";
 
   # Patch CUPS to handle Brother's nameWithLanguage/textWithLanguage IPP encoding
-  # and emit cupsIPPSupplies in generated PPDs for IPP Everywhere printers.
+  # (upstream in 2.5, needed for 2.4.x) and merge SNMP + IPP supply data so all
+  # 10 supplies (toners, drums, belt, waste) appear with precise toner levels.
   cups-patched = pkgs.cups.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [
       ../patches/cups-brother-marker-supply-levels.patch
@@ -43,7 +44,10 @@ in
               location = printerLocation;
               description = printerDescription;
               deviceUri = printerUri;
-              ppdOptions.PageSize = pageSize;
+              ppdOptions = {
+                PageSize = pageSize;
+                cupsSNMPSupplies = "true";
+              };
             }
           ];
         };

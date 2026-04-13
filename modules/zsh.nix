@@ -35,8 +35,11 @@ let
     ne = "pushd > /dev/null; cd $HOME/git/nixos; vim; popd > /dev/null";
     ns = "nix-shell";
     nsp = "nix search package";
-    # gemini
+    # llms
     g = "gemini";
+    gr = "gemini --resume";
+    c = "claude";
+    cr = "gemini --resume";
     # convenience
     mip = "curl ip.me";
   };

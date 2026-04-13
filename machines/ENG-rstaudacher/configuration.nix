@@ -148,7 +148,7 @@
       "x-systemd.automount"
       "noauto"
       "x-systemd.mount-timeout=10s"
-      "timeo=15"
+      "timeo=150"
       "soft"
     ];
   };

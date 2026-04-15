@@ -120,6 +120,9 @@ in
             bindkey "^[[3~" delete-char
             bindkey '^[[Z' reverse-menu-complete
             bindkey '^B' autosuggest-toggle
+
+            # feature script completions
+            eval "$(feature --completions zsh)"
           '';
         };
 

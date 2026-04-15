@@ -102,6 +102,7 @@
     pavucontrol
     zoom-us
     slack
+    vault
     freerdp
     realvnc-vnc-viewer
     pamixer

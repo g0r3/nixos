@@ -166,6 +166,8 @@
           ShowRecentTags = true;
         };
         "com.apple.menuextra.clock" = {
+          Show24Hour = true;
+          ShowAMPM = false;
           ShowDate = 0; # hide date in menu bar clock
         };
         "com.apple.sidebarlists" = {

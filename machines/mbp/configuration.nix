@@ -219,8 +219,8 @@
         FXPreferredViewStyle = "clmv";
         NewWindowTarget = "Home";
         ShowExternalHardDrivesOnDesktop = true;
-        ShowHardDrivesOnDesktop = true;
-        ShowMountedServersOnDesktop = true;
+        ShowHardDrivesOnDesktop = false;
+        ShowMountedServersOnDesktop = false;
         ShowPathbar = true;
         _FXSortFoldersFirst = true;
       };

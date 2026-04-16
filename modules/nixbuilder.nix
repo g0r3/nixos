@@ -6,57 +6,29 @@
 }:
 let
   cfg = config.modules.nixbuilder;
+
+  servers = [
+    "nixbld01.qa.ngdev.eu.ad.cuda-inc.com"
+    "nixbld02.qa.ngdev.eu.ad.cuda-inc.com"
+    "nixbld03.qa.ngdev.eu.ad.cuda-inc.com"
+  ];
+
+  mkSubstituter = host: "ssh-ng://nixbuilder@${host}";
 in
 {
   options.modules.nixbuilder.enable = lib.mkEnableOption "Whether to enable the nixbuilder module";
 
   config = lib.mkIf cfg.enable {
-    nix.distributedBuilds = true;
-    nix.settings.builders-use-substitutes = true;
+    nix.settings = {
+      substituters = map mkSubstituter servers;
+      trusted-substituters = map mkSubstituter servers;
+      connect-timeout = 5;
+    };
 
-    nix.buildMachines = [
-      {
-        hostName = "nixbld01.qa.ngdev.eu.ad.cuda-inc.com";
-        sshUser = "nixbuilder";
-        sshKey = "/home/rstaudacher/.ssh/nixbuilder";
-        system = "x86_64-linux";
-        supportedFeatures = [
-          "nixos-test"
-          "big-parallel"
-          "kvm"
-          "benchmark"
-        ];
-        maxJobs = 2;
-        speedFactor = 1;
-      }
-      {
-        hostName = "nixbld02.qa.ngdev.eu.ad.cuda-inc.com";
-        sshUser = "nixbuilder";
-        sshKey = "/home/rstaudacher/.ssh/nixbuilder";
-        system = "x86_64-linux";
-        supportedFeatures = [
-          "nixos-test"
-          "big-parallel"
-          "kvm"
-          "benchmark"
-        ];
-        maxJobs = 2;
-        speedFactor = 1;
-      }
-      {
-        hostName = "nixbld03.qa.ngdev.eu.ad.cuda-inc.com";
-        sshUser = "nixbuilder";
-        sshKey = "/home/rstaudacher/.ssh/nixbuilder";
-        system = "x86_64-linux";
-        supportedFeatures = [
-          "nixos-test"
-          "big-parallel"
-          "kvm"
-          "benchmark"
-        ];
-        maxJobs = 2;
-        speedFactor = 1;
-      }
-    ];
+    programs.ssh.extraConfig = ''
+      Host ${lib.concatStringsSep " " servers}
+        IdentityFile /home/rstaudacher/.ssh/nixbuilder
+        User nixbuilder
+    '';
   };
 }

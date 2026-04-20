@@ -23,9 +23,9 @@
       sharedConfig = {
         nixpkgs.config.allowUnfree = true;
         nixpkgs.overlays = [
-          (final: prev: {
-            claude-code = final.callPackage ./packages/claude-code { };
-          })
+          # (final: prev: {
+          #   claude-code = final.callPackage ./packages/claude-code { };
+          # })
         ];
         nix.settings.experimental-features = [
           "nix-command"
